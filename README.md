@@ -381,7 +381,6 @@ export default defineConfig([
 			eslintConfigPrettier,
 		],
 		languageOptions: {
-			ecmaVersion: 2020,
 			globals: globals.browser,
 		},
 	},
@@ -617,7 +616,6 @@ pnpm dev
   aparece o conteúdo da página Home: **"Home Page!"**
 - Troque a URL por http://localhost:3001/sign-in e veja carregar  
   a outra página SignIn: **"SignIn Page!"**
-
 
 8 - Comite como:
 
