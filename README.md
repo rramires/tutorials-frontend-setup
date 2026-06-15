@@ -1527,3 +1527,38 @@ git add .
 git commit -m "feat: add Tailwind CSS styles and integrate prettier-plugin-tailwindcss for class sorting"
 git push
 ```
+
+---
+
+### Instalando a biblioteca de ícones Lucide React
+
+- Biblioteca de ícones SVG para React, com suporte a TypeScript e tree-shaking (só o que usar vai no bundle).  
+  [Lucide React](https://lucide.dev/guide/packages/lucide-react)
+
+1 - Instale:
+
+```sh
+pnpm add lucide-react
+```
+
+2 - Uso direto: importe o ícone pelo nome e use como componente. As props `className` e `size` controlam aparência:
+
+```js
+import { Moon, Sun, LogIn } from 'lucide-react'
+
+// className controla cor e tamanho via Tailwind
+<Moon className='h-5 w-5 text-slate-300' />
+
+// ou via prop size (em px)
+<Sun size={20} />
+```
+
+- Todos os ícones disponíveis em: [lucide.dev/icons](https://lucide.dev/icons)
+
+3 - Comite como:
+
+```sh
+git add .
+git commit -m "feat: add lucide-react icon library"
+git push
+```
