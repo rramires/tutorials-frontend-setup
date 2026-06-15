@@ -1661,3 +1661,82 @@ git add .
 git commit -m "feat: add Input component using Tailwind Merge composition pattern"
 git push
 ```
+
+---
+
+### Componente de Button com Tailwind Variants
+
+- O **Tailwind Variants** permite definir variantes tipadas para componentes, com classes base e variações (primary, outline, ghost, etc.) em um objeto declarativo. Diferente do merge simples, ele garante que apenas uma variante de cada tipo seja aplicada por vez.  
+  [tailwind-variants](https://www.npmjs.com/package/tailwind-variants)
+
+1 - Instale:
+
+```sh
+pnpm add tailwind-variants
+```
+
+2 - Crie o arquivo **button.tsx** em **src/components/ui-sample**, contendo:
+
+```js
+import type { ComponentProps } from 'react'
+import { tv, type VariantProps } from 'tailwind-variants'
+
+const button = tv({
+	base: [
+		'rounded-lg px-4 py-2 text-sm font-semibold shadow-sm outline-none',
+		'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-500',
+		'active:opacity-80 cursor-pointer',
+	],
+	variants: {
+		variant: {
+			primary:
+				'bg-slate-700 text-white hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500',
+			outline:
+				'border border-slate-600 text-slate-700 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700',
+			ghost: 'rounded-md px-2 shadow-none text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700',
+		},
+	},
+	defaultVariants: {
+		variant: 'primary',
+	},
+})
+
+export type ButtonProps = ComponentProps<'button'> & VariantProps<typeof button>
+
+export function Button({ variant, className, ...props }: ButtonProps) {
+	return <button {...props} className={button({ variant, class: className })} />
+}
+```
+
+- `class` (não `className`) é a chave que o `tailwind-variants` usa para mesclar classes externas com as da variante.  
+  Assim `<Button className='mt-6 w-full'>` funciona corretamente.
+
+3 - Exemplos de uso:
+
+```js
+import { Button } from '@/components/ui-sample/button'
+
+// Primário (padrão)
+<Button type='submit'>Save</Button>
+
+// Outline
+<Button variant='outline'>Cancel</Button>
+
+// Ghost (ícone, sem borda)
+<Button variant='ghost' onClick={toggleTheme}>
+	<Moon className='h-5 w-5' />
+</Button>
+
+// Com classes adicionais (width, margin, etc.)
+<Button type='submit' className='mt-6 w-full'>
+	Login
+</Button>
+```
+
+4 - Comite como:
+
+```sh
+git add .
+git commit -m "feat: add Button component using Tailwind Variants"
+git push
+```
