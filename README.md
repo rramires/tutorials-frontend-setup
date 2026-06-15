@@ -958,13 +958,8 @@ export const router = createBrowserRouter(
 5 - Para testar, basta disparar um erro fictício de alguma página, ex:
 
 ```js
-export function SignIn() {
-	throw new Error('Simulação de erro na SignIn')
-	return <h2>SignIn Page!</h2>
-}
-// ou
 export function Home() {
-	throw new Error('Simulação de erro na Home')
+	// throw new Error('Simulação de erro na Home')
 	return <h2>Home Page!</h2>
 }
 ```
