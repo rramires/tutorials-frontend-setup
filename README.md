@@ -345,49 +345,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from './App.tsx'
 ```
 
-4 - O arquivo final **eslint.config.js**, ficou assim, caso queira revisar:
-
-```js
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
-import eslintConfigPrettier from 'eslint-config-prettier'
-import simpleImportSort from 'eslint-plugin-simple-import-sort'
-
-export default defineConfig([
-	globalIgnores(['dist']),
-	{
-		files: ['**/*.{ts,tsx}'],
-		plugins: {
-			'simple-import-sort': simpleImportSort,
-		},
-		extends: [
-			js.configs.recommended,
-			tseslint.configs.recommended,
-			reactHooks.configs['recommended-latest'],
-			reactRefresh.configs.vite,
-			{
-				rules: {
-					'prefer-const': 'warn',
-					'no-unused-vars': 'off',
-					'@typescript-eslint/no-unused-vars': 'warn',
-					'simple-import-sort/imports': 'error',
-					/* 'simple-import-sort/exports': 'error', */
-				},
-			},
-			eslintConfigPrettier,
-		],
-		languageOptions: {
-			globals: globals.browser,
-		},
-	},
-])
-```
-
-5 - Comite como:
+4 - Comite como:
 
 ```sh
 git add .
@@ -472,12 +430,11 @@ git push
 [Curly Rule](https://eslint.org/docs/latest/rules/curly)
 
 - **Atenção à ordem:** o **eslint-config-prettier** trata o curly como uma _special rule_ e o desativa (define como `off`), porque nas opções **"multi-line"** e **"multi-or-nest"** ele pode conflitar com o Prettier. Como o **eslintConfigPrettier** entra por último no array, qualquer curly definido antes dele é anulado.  
-  Por isso, adicione o curly em um bloco próprio **depois** do **eslintConfigPrettier** no **eslint.config.js**, para reativá-lo. No modo **"all"** não há conflito real com o Prettier:
+  Por isso, adicione o curly em um bloco próprio **logo após** o **eslintConfigPrettier** no **extends** do **eslint.config.js**, para reativá-lo. No modo **"all"** não há conflito real com o Prettier:
 
 ```js
 /* ...
 	eslintConfigPrettier, */
-	// curly depois do eslintConfigPrettier, que o desativa como special rule
 	{
 		rules: {
 			curly: ['error', 'all'],
@@ -489,16 +446,25 @@ git push
 2 - Para testar, deixe no **App.tsx** um if sem chaves (use uma condição não constante, senão a regra **no-constant-condition** acusa antes):
 
 ```js
-if (lang) console.log(`Hello World from ${lang}!`)
+const lang = navigator.language
+if (lang) {
+	console.log(`Hello World from ${lang}!`)
+}
 ```
 
 Deve aparecer em PROBLEMS:  
 Expected { after 'if' condition
 
-Com o **--fix**, o Eslint adiciona as chaves automaticamente:
+Com o **--fix**, o Eslint adiciona as chaves automaticamente. Adicione o script no **package.json**:
+
+```json
+"lint:fix": "eslint . --fix",
+```
+
+E execute:
 
 ```sh
-pnpm run lint:fix
+pnpm lint:fix
 ```
 
 3 - O Prettier normalmente não altera a estrutura do código, então não força chaves por conta própria. Para que ele também faça isso ao formatar, instale o **prettier-plugin-curly**, que é o equivalente à opção **"all"** da regra curly, no nível do formatter:  
@@ -529,7 +495,54 @@ pnpm add -D prettier-plugin-curly
 
 - Resumindo as duas camadas: o **prettier-plugin-curly** age no formatter e adiciona as chaves ao salvar, independente do Eslint. A regra **curly** do Eslint sinaliza a violação no editor e no terminal, mas só funciona se for declarada **depois** do **eslintConfigPrettier**, como feito no passo 1. Juntas apontam na mesma direção: o Eslint avisa e o Prettier corrige ao salvar, o mesmo fluxo das outras regras de formatação.
 
-6 - Comite como:
+6 - O arquivo final **eslint.config.js**, ficou assim, caso queira revisar antes do commit:
+
+```js
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import tseslint from 'typescript-eslint'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import eslintConfigPrettier from 'eslint-config-prettier'
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+
+export default defineConfig([
+	globalIgnores(['dist']),
+	{
+		files: ['**/*.{ts,tsx}'],
+		plugins: {
+			'simple-import-sort': simpleImportSort,
+		},
+		extends: [
+			js.configs.recommended,
+			tseslint.configs.recommended,
+			reactHooks.configs.flat.recommended,
+			reactRefresh.configs.vite,
+			{
+				rules: {
+					'prefer-const': 'warn',
+					'no-unused-vars': 'off',
+					'@typescript-eslint/no-unused-vars': 'warn',
+					'simple-import-sort/imports': 'error',
+					/* 'simple-import-sort/exports': 'error', */
+				},
+			},
+			eslintConfigPrettier,
+			{
+				rules: {
+					curly: ['error', 'all'],
+				},
+			},
+		],
+		languageOptions: {
+			globals: globals.browser,
+		},
+	},
+])
+```
+
+7 - Comite como:
 
 ```sh
 git add .

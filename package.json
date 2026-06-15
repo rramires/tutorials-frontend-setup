@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "check": "prettier --check \"src/**/*.ts*\"",
     "format": "prettier --write \"src/**/*.ts*\""
@@ -28,6 +29,7 @@
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "globals": "^17.6.0",
     "prettier": "3.8.4",
+    "prettier-plugin-curly": "^0.4.1",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12"

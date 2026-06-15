@@ -1,4 +1,5 @@
 {
+	"plugins": ["prettier-plugin-curly"],
 	"printWidth": 80,
 	"endOfLine": "lf",
 	"singleQuote": true,

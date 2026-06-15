@@ -29,6 +29,11 @@ export default defineConfig([
 				},
 			},
 			eslintConfigPrettier,
+			{
+				rules: {
+					curly: ['error', 'all'],
+				},
+			},
 		],
 		languageOptions: {
 			globals: globals.browser,
