@@ -2,17 +2,13 @@ import { Outlet } from 'react-router'
 
 export function RegisterLayout() {
 	return (
-		<>
-			<header>
-				<h1>RegisterLayout Header</h1>
-			</header>
-			<main>
+		<div className='flex h-screen flex-col'>
+			<header className='flex h-8 items-center bg-slate-800 pl-8 text-slate-200'></header>
+			<main className='flex flex-1'>
 				{/* Content will change here */}
 				<Outlet />
 			</main>
-			<footer>
-				<p>RegisterLayout Footer</p>
-			</footer>
-		</>
+			<footer className='flex h-8 items-center bg-slate-800 pl-8 text-slate-200'></footer>
+		</div>
 	)
 }

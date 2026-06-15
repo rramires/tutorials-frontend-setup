@@ -2,17 +2,13 @@ import { Outlet } from 'react-router'
 
 export function AuthLayout() {
 	return (
-		<>
-			<header>
-				<h1>AuthLayout Header</h1>
-			</header>
-			<main>
+		<div className='flex h-screen flex-col'>
+			<header className='flex h-8 items-center bg-slate-800 pl-8 text-slate-200'></header>
+			<main className='flex flex-1'>
 				{/* Content will change here */}
 				<Outlet />
 			</main>
-			<footer>
-				<p>AuthLayout Footer</p>
-			</footer>
-		</>
+			<footer className='flex h-8 items-center bg-slate-800 pl-8 text-slate-200'></footer>
+		</div>
 	)
 }

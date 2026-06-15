@@ -690,7 +690,7 @@ export function AppLayout() {
 }
 ```
 
-3 - Na pasta **\_layouts** crie um aquivo **c** e adicione:
+3 - Na pasta **\_layouts** crie um aquivo **auth-layout.tsx** e adicione:
 
 ```js
 import { Outlet } from 'react-router'
@@ -959,7 +959,7 @@ export const router = createBrowserRouter(
 
 ```js
 export function Home() {
-	throw new Error('Simulação de erro na Home')
+	throw new Error('Error simulation on the Home page.')
 	return <h2>Home Page!</h2>
 }
 ```
@@ -1297,7 +1297,7 @@ pnpm add -D prettier-plugin-tailwindcss
 
 ```js
 // Dentro do SignIn()
-const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
 	e.preventDefault()
 	// Add login logic here
 }
@@ -1359,15 +1359,128 @@ e
 </>
 ```
 
-7 - Rode para verificar:
+7 - Adicione também alguns estilos no return do nosso layout em **\_layouts/register-layout.tsx**:
+
+```js
+<div className='flex h-screen flex-col'>
+	<header className='flex h-8 items-center bg-slate-800 pl-8 text-slate-200'></header>
+	<main className='flex flex-1'>
+		{/* Content will change here */}
+		<Outlet />
+	</main>
+	<footer className='flex h-8 items-center bg-slate-800 pl-8 text-slate-200'></footer>
+</div>
+```
+
+8 - Adicione também um form de cadastro de exemplo na página Register:
+
+```js
+// Dentro do Register()
+const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+	e.preventDefault()
+	// Add register logic here
+}
+```
+
+e
+
+```js
+// No return
+<>
+	<PageTitle title='Register' />
+	<div className='flex flex-1 items-center justify-center bg-slate-900 px-8 py-4 text-slate-100'>
+		<div className='w-full max-w-md rounded-lg bg-slate-800 p-8 shadow-lg'>
+			<h2 className='mb-6 text-center text-2xl font-medium'>
+				Create account
+			</h2>
+
+			<form onSubmit={handleSubmit} className='space-y-4'>
+				<div>
+					<label
+						htmlFor='name'
+						className='mb-1 block text-sm font-medium'
+					>
+						Name
+					</label>
+					<input
+						id='name'
+						type='text'
+						placeholder='Enter your name'
+						className='w-full rounded-md border border-slate-600 bg-slate-700 px-4 py-2 text-slate-100 placeholder-slate-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden'
+						required
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor='email'
+						className='mb-1 block text-sm font-medium'
+					>
+						Email
+					</label>
+					<input
+						id='email'
+						type='email'
+						placeholder='Enter your email'
+						className='w-full rounded-md border border-slate-600 bg-slate-700 px-4 py-2 text-slate-100 placeholder-slate-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden'
+						required
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor='password'
+						className='mb-1 block text-sm font-medium'
+					>
+						Password
+					</label>
+					<input
+						id='password'
+						type='password'
+						placeholder='Enter your password'
+						className='w-full rounded-md border border-slate-600 bg-slate-700 px-4 py-2 text-slate-100 placeholder-slate-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden'
+						required
+					/>
+				</div>
+
+				<div>
+					<label
+						htmlFor='confirmPassword'
+						className='mb-1 block text-sm font-medium'
+					>
+						Confirm password
+					</label>
+					<input
+						id='confirmPassword'
+						type='password'
+						placeholder='Confirm your password'
+						className='w-full rounded-md border border-slate-600 bg-slate-700 px-4 py-2 text-slate-100 placeholder-slate-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden'
+						required
+					/>
+				</div>
+
+				<button
+					type='submit'
+					/* disabled */
+					className='mt-6 w-full rounded-md bg-blue-900 px-4 py-2 font-semibold text-white transition-colors enabled:cursor-pointer enabled:hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60'
+				>
+					Register
+				</button>
+			</form>
+		</div>
+	</div>
+</>
+```
+
+9 - Rode para verificar:
 
 ```sh
 pnpm dev
 ```
 
-- Veja o conteúdo das páginas Home e SignIn, centralizados e com os h2 formatados.
+- Veja o conteúdo das páginas Home, SignIn e Register, centralizados e com os forms formatados.
 
-8 - Vamos adicionar alguma formatação nas páginas de erro, **e404.tsx** e **error.tsx**, que ficarão assim, respectivamente:
+10 - Vamos adicionar alguma formatação nas páginas de erro, **e404.tsx** e **error.tsx**, que ficarão assim, respectivamente:
 
 ```js
 <>
@@ -1405,9 +1518,9 @@ pnpm dev
 - Lembrando que para testar essas páginas de erro devemos:  
   Usar uma rota inexistente **http://localhost:3001/other** para ver o **e404.tsx** sendo renderizado.
 
-    Provocar um erro em alguma página, adicionando por exemplo na Home: **throw new Error('Home error simulation')**, e ir para **http://localhost:3001/**, para ver o **error.tsx** sendo renderizado.
+    Provocar um erro em alguma página, adicionando por exemplo na Home: **throw new Error('Error simulation on the Home page.')**, e ir para **http://localhost:3001/**, para ver o **error.tsx** sendo renderizado.
 
-9 - Comite como:
+11 - Comite como:
 
 ```sh
 git add .
