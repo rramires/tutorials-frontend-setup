@@ -1,3 +1,11 @@
+import { PageTitle } from '@/components/title/page-title'
+
 export function Home() {
-	return <h2>Home Page</h2>
+	// throw new Error('Simulação de erro na Home')
+	return (
+		<>
+			<PageTitle title='Home' />
+			<h2>Home Page!</h2>
+		</>
+	)
 }

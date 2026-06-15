@@ -1,3 +1,10 @@
+import { PageTitle } from '@/components/title/page-title'
+
 export function SignIn() {
-	return <h2>SignIn Page</h2>
+	return (
+		<>
+			<PageTitle title='Sign In' />
+			<h2>SignIn Page!</h2>
+		</>
+	)
 }

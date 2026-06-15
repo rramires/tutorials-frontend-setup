@@ -959,7 +959,7 @@ export const router = createBrowserRouter(
 
 ```js
 export function Home() {
-	// throw new Error('Simulação de erro na Home')
+	throw new Error('Simulação de erro na Home')
 	return <h2>Home Page!</h2>
 }
 ```
@@ -1065,10 +1065,7 @@ import { router } from './routes'
 
 export function App() {
 	return (
-		<TitleProvider
-			titleTemplate='%s | Vite+RR-DOM'
-			defaultTitle='Vite+RR-DOM'
-		>
+		<TitleProvider titleTemplate='%s | FrontEnd' defaultTitle='FrontEnd'>
 			<RouterProvider router={router} />
 		</TitleProvider>
 	)
@@ -1080,7 +1077,7 @@ export function App() {
 Em Home:
 
 ```js
-import { PageTitle } from '@components/title/page-title'
+import { PageTitle } from '@/components/title/page-title'
 
 export function Home() {
 	return (
