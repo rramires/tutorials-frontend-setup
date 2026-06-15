@@ -1,12 +1,7 @@
-export function App() {
-	const lang = navigator.language
-	if (lang) {
-		console.log(`Hello World from ${lang}!`)
-	}
+import { RouterProvider } from 'react-router'
 
-	return (
-		<>
-			<h1>Hello World !!!</h1>
-		</>
-	)
+import { router } from './routes'
+
+export function App() {
+	return <RouterProvider router={router} />
 }

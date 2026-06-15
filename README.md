@@ -561,11 +561,12 @@ git push
 pnpm add react-router
 ```
 
-2 - Adicione uma pasta **pages** e dentro dela outras duas pastas **unauth** e **app**:
+2 - Adicione uma pasta **pages** e dentro dela três pastas: **auth** (sign-in, forgot-password, reset-password), **register** (cadastro de novos usuários) e **app** (área autenticada):
 
 ```sh
 mkdir src/pages
-mkdir src/pages/unauth
+mkdir src/pages/auth
+mkdir src/pages/register
 mkdir src/pages/app
 ```
 
@@ -577,7 +578,7 @@ export function Home() {
 }
 ```
 
-4 - Crie uma página dentro de **pages/unauth** chamada **sign-in.tsx**, contendo:
+4 - Crie uma página dentro de **pages/auth** chamada **sign-in.tsx**, contendo:
 
 ```js
 export function SignIn() {
@@ -585,13 +586,22 @@ export function SignIn() {
 }
 ```
 
-5 - Crie um arquivo chamado **routes.tsx** em **src** e adicione:
+5 - Crie uma página dentro de **pages/register** chamada **register.tsx**, contendo:
+
+```js
+export function Register() {
+	return <h2>Register Page</h2>
+}
+```
+
+6 - Crie um arquivo chamado **routes.tsx** em **src** e adicione:
 
 ```js
 import { createBrowserRouter } from 'react-router'
 
 import { Home } from './pages/app/home'
-import { SignIn } from './pages/unauth/sign-in'
+import { SignIn } from './pages/auth/sign-in'
+import { Register } from './pages/register/register'
 
 export const router = createBrowserRouter([
 	{
@@ -602,10 +612,14 @@ export const router = createBrowserRouter([
 		path: '/sign-in',
 		element: <SignIn />,
 	},
+	{
+		path: '/register',
+		element: <Register />,
+	},
 ])
 ```
 
-6 - No arquivo **app.tsx** adicione, substituindo o Hello World:
+7 - No arquivo **app.tsx** adicione, substituindo o Hello World:
 
 ```js
 // adicione os imports
@@ -619,7 +633,7 @@ export function App() {
 }
 ```
 
-7 - Rode para verificar:
+8 - Rode para verificar:
 
 ```sh
 pnpm dev
@@ -629,8 +643,10 @@ pnpm dev
   aparece o conteúdo da página Home: **"Home Page!"**
 - Troque a URL por http://localhost:3001/sign-in e veja carregar  
   a outra página SignIn: **"SignIn Page!"**
+- Troque a URL por http://localhost:3001/register e veja carregar  
+  a outra página Register: **"Register Page!"**
 
-8 - Comite como:
+9 - Comite como:
 
 ```sh
 git add .
@@ -649,7 +665,7 @@ mkdir src/pages/_layouts
 ```
 
 - Nela vamos criar 2 layouts básicos para exemplificar.  
-  Um para a área aberta e outro para a área logada.
+  Um para a área autenticada (**app**) e outro para os fluxos de acesso (**auth**). A pasta **register** seguiria o mesmo padrão com seu próprio layout quando necessário.
 
 2 - Na pasta **\_layouts** crie um aquivo **app-layout.tsx** e adicione:
 
@@ -674,23 +690,23 @@ export function AppLayout() {
 }
 ```
 
-3 - Na pasta **\_layouts** crie um aquivo **unauth-layout.tsx** e adicione:
+3 - Na pasta **\_layouts** crie um aquivo **auth-layout.tsx** e adicione:
 
 ```js
 import { Outlet } from 'react-router'
 
-export function UnauthLayout() {
+export function AuthLayout() {
 	return (
 		<>
 			<header>
-				<h1>UnauthLayout Header</h1>
+				<h1>AuthLayout Header</h1>
 			</header>
 			<main>
 				{/* Content will change here */}
 				<Outlet />
 			</main>
 			<footer>
-				<p>UnauthLayout Footer</p>
+				<p>AuthLayout Footer</p>
 			</footer>
 		</>
 	)
@@ -702,7 +718,7 @@ export function UnauthLayout() {
 ```js
 // adicione
 import { AppLayout } from './pages/_layouts/app-layout'
-import { UnauthLayout } from './pages/_layouts/unauth-layout'
+import { AuthLayout } from './pages/_layouts/auth-layout'
 
 export const router = createBrowserRouter([
 	// remova
@@ -722,7 +738,7 @@ export const router = createBrowserRouter([
 	},
 	{
 		path: '/sign-in',
-		element: <UnauthLayout />,
+		element: <AuthLayout />,
 		children: [{ index: true, element: <SignIn /> }],
 	},
 ])
@@ -734,7 +750,7 @@ export const router = createBrowserRouter([
   aparece o conteúdo da página AppLayout, e carrega no local que foi adicionado o Outlet o conteúdo de Home: "Home Page!"
 
     Troque a URL por http://localhost:3001/sign-in e veja carregar
-    a outra página UnauthLayout e no local do Outlet o conteúdo de SignIn: "SignIn Page!"
+    a outra página AuthLayout e no local do Outlet o conteúdo de SignIn: "SignIn Page!"
 
 - Podemos ter várias sub-páginas usando sempre: **path, element e children** e usando o **Outlet** dentro delas para carregar o conteúdo desejado no local que quisermos, ex:
 
@@ -754,7 +770,7 @@ children: [
 
 ```sh
 git add .
-git commit -m "feat: add AppLayout and UnauthLayout components for routing"
+git commit -m "feat: add AppLayout and AuthLayout components for routing"
 git push
 ```
 
@@ -830,11 +846,11 @@ O arquivo final ficará assim:
 import { createBrowserRouter } from 'react-router'
 
 import { AppLayout } from './pages/_layouts/app-layout'
-import { UnauthLayout } from './pages/_layouts/unauth-layout'
+import { AuthLayout } from './pages/_layouts/auth-layout'
 import { Home } from './pages/app/home'
 import { NotFound } from './pages/e404'
 import { ErrorPage } from './pages/error'
-import { SignIn } from './pages/unauth/sign-in'
+import { SignIn } from './pages/auth/sign-in'
 
 export const router = createBrowserRouter([
 	{
@@ -848,7 +864,7 @@ export const router = createBrowserRouter([
 			},
 			{
 				path: '/sign-in',
-				element: <UnauthLayout />,
+				element: <AuthLayout />,
 				children: [{ index: true, element: <SignIn /> }],
 			},
 		],
@@ -870,9 +886,9 @@ import {
 } from 'react-router'
 
 import { AppLayout } from './pages/_layouts/app'
-import { UnauthLayout } from './pages/_layouts/unauth'
+import { AuthLayout } from './pages/_layouts/auth'
 import { Home } from './pages/app/home'
-import { SignIn } from './pages/unauth/sign-in'
+import { SignIn } from './pages/auth/sign-in'
 import { NotFound } from './pages/e404'
 import { ErrorPage } from './pages/error'
 
@@ -882,7 +898,7 @@ export const router = createBrowserRouter(
 			<Route path='/' element={<AppLayout />}>
 				<Route index element={<Home />} />
 			</Route>
-			<Route path='/sign-in' element={<UnauthLayout />}>
+			<Route path='/sign-in' element={<AuthLayout />}>
 				<Route index element={<SignIn />} />
 			</Route>
 			<Route path='*' element={<NotFound />} />
@@ -1209,7 +1225,7 @@ pnpm add -D prettier-plugin-tailwindcss
 - Veja tamtém a ordem classificação das classes, invertendo a ordem
   **' font-medium text-2xl'** e vendo que volta para **'text-2xl font-medium'** quando salva, graças ao prettier-plugin-tailwindcss.
 
-5 - Adicione também alguns estilos no return do nosso layout em **\_layouts/unauth-layout.tsx**:
+5 - Adicione também alguns estilos no return do nosso layout em **\_layouts/auth-layout.tsx**:
 
 ```js
 <div className='flex h-screen flex-col'>
