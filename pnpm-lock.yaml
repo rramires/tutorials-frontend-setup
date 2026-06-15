@@ -23,6 +23,9 @@ importers:
       react-router:
         specifier: ^7.17.0
         version: 7.17.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      tailwind-merge:
+        specifier: ^3.6.0
+        version: 3.6.0
       tailwindcss:
         specifier: ^4.3.1
         version: 4.3.1
@@ -1050,6 +1053,9 @@ packages:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
 
+  tailwind-merge@3.6.0:
+    resolution: {integrity: sha512-uxL7qAVQriqRQPAyK3pj66VqskWqoZ37PW94jwOTwNfq/z9oyu1V+eqrZqtR2+fCiXdYOZe/Modt8GtvqNzu+w==}
+
   tailwindcss@4.3.1:
     resolution: {integrity: sha512-hk+TB1m+K8CYNrP6rjQaq/Y+4Zylwpa87mLYBKCunwnnQ9p+fHb7kmSfGqyEJoxF/O6CDyABWVFEafNSYKll+Q==}
 
@@ -2006,6 +2012,8 @@ snapshots:
   shebang-regex@3.0.0: {}
 
   source-map-js@1.2.1: {}
+
+  tailwind-merge@3.6.0: {}
 
   tailwindcss@4.3.1: {}
 

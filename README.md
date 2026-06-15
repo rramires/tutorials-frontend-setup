@@ -1562,3 +1562,102 @@ git add .
 git commit -m "feat: add lucide-react icon library"
 git push
 ```
+
+---
+
+### Componente de Input com Tailwind Merge
+
+- O **Tailwind Merge** resolve conflitos de classes Tailwind ao combiná-las dinamicamente. Sem ele, classes duplicadas ou conflitantes (ex: `px-2 px-4`) ficam ambas no DOM — o merge garante que a última definição prevalece.  
+  [tailwind-merge](https://www.npmjs.com/package/tailwind-merge)
+
+- Vamos usar o **Composition Pattern** do React para criar um Input flexível composto de partes independentes: um container, um espaço para ícone/asset opcional e o controle de input em si. Essa separação permite combinar as partes livremente sem props excessivas.
+
+1 - Instale:
+
+```sh
+pnpm add tailwind-merge
+```
+
+2 - Crie a pasta **ui-sample** dentro de **components**:
+
+```sh
+mkdir src/components/ui-sample
+```
+
+- Usamos o sufixo **-sample** para deixar claro que são componentes de exemplo (Tailwind Merge e Tailwind Variants). Numa próxima etapa instalaremos o **shadcn/ui**, que cria seus componentes em **components/ui** — manter os exemplos em **ui-sample** evita conflito.
+
+3 - Crie o arquivo **input.tsx** em **src/components/ui-sample**, contendo:
+
+```js
+import { type ComponentProps } from 'react'
+import { twMerge } from 'tailwind-merge'
+
+/* Container: border and focus around the entire field */
+
+type InputContainerProps = ComponentProps<'div'>
+export function InputContainer({ className, ...props }: InputContainerProps) {
+	return (
+		<div
+			className={twMerge(
+				'flex w-full items-center gap-2 rounded-lg border border-slate-600 bg-slate-700 px-3 py-2 shadow-sm',
+				'focus-within:border-slate-400 focus-within:ring-4 focus-within:ring-slate-400/20',
+				'dark:border-slate-600 dark:bg-slate-700 dark:focus-within:border-slate-300',
+				className,
+			)}
+			{...props}
+		/>
+	)
+}
+
+/* Asset: icon or element before/after the field */
+
+type InputAssetProps = ComponentProps<'div'>
+export function InputAsset(props: InputAssetProps) {
+	return <div {...props} />
+}
+
+/* Control: the input itself, without its own border */
+
+type InputControlProps = ComponentProps<'input'>
+export function InputControl(props: InputControlProps) {
+	return (
+		<input
+			className='flex-1 border-0 bg-transparent p-0 text-slate-900 placeholder-slate-500 outline-none dark:text-slate-100 dark:placeholder-slate-400'
+			{...props}
+		/>
+	)
+}
+```
+
+4 - Exemplo de uso básico (só container + control):
+
+```js
+import { InputContainer, InputControl } from '@/components/ui-sample/input'
+;<InputContainer>
+	<InputControl type='text' placeholder='Type here...' />
+</InputContainer>
+```
+
+5 - Exemplo com ícone à esquerda (usando **InputAsset**):
+
+```js
+import { Search } from 'lucide-react'
+import { InputAsset, InputContainer, InputControl } from '@/components/ui-sample/input'
+;<InputContainer>
+	<InputAsset>
+		<Search className='h-4 w-4 text-slate-400' />
+	</InputAsset>
+	<InputControl type='text' placeholder='Search...' />
+</InputContainer>
+```
+
+- O `twMerge` no `InputContainer` permite sobrescrever classes via `className`, ex:  
+  `<InputContainer className='rounded-full'>` substitui o `rounded-lg` padrão sem duplicar.
+
+6 - Comite como:
+
+```sh
+git add .
+git commit -m "feat: add Input component using Tailwind Merge composition pattern"
+git push
+```
