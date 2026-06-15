@@ -664,8 +664,8 @@ git push
 mkdir src/pages/_layouts
 ```
 
-- Nela vamos criar 2 layouts básicos para exemplificar.  
-  Um para a área autenticada (**app**) e outro para os fluxos de acesso (**auth**). A pasta **register** seguiria o mesmo padrão com seu próprio layout quando necessário.
+- Nela vamos criar 3 layouts básicos para exemplificar.  
+  Um para a área autenticada (**app**), outro para os fluxos de acesso (**auth**) e um terceiro para o cadastro (**register**).
 
 2 - Na pasta **\_layouts** crie um aquivo **app-layout.tsx** e adicione:
 
@@ -690,7 +690,7 @@ export function AppLayout() {
 }
 ```
 
-3 - Na pasta **\_layouts** crie um aquivo **auth-layout.tsx** e adicione:
+3 - Na pasta **\_layouts** crie um aquivo **c** e adicione:
 
 ```js
 import { Outlet } from 'react-router'
@@ -713,12 +713,36 @@ export function AuthLayout() {
 }
 ```
 
-4 - Modifique o arquivo **routes.tsx** para criar a nova estrutura de rotas:
+4 - Na pasta **\_layouts** crie um aquivo **register-layout.tsx** e adicione:
+
+```js
+import { Outlet } from 'react-router'
+
+export function RegisterLayout() {
+	return (
+		<>
+			<header>
+				<h1>RegisterLayout Header</h1>
+			</header>
+			<main>
+				{/* Content will change here */}
+				<Outlet />
+			</main>
+			<footer>
+				<p>RegisterLayout Footer</p>
+			</footer>
+		</>
+	)
+}
+```
+
+5 - Modifique o arquivo **routes.tsx** para criar a nova estrutura de rotas:
 
 ```js
 // adicione
 import { AppLayout } from './pages/_layouts/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
+import { RegisterLayout } from './pages/_layouts/register-layout'
 
 export const router = createBrowserRouter([
 	// remova
@@ -729,6 +753,10 @@ export const router = createBrowserRouter([
 	{
 		path: '/sign-in',
 		element: <SignIn />,
+	},
+	{
+		path: '/register',
+		element: <Register />,
 	}, */
 	// adicione
 	{
@@ -741,16 +769,24 @@ export const router = createBrowserRouter([
 		element: <AuthLayout />,
 		children: [{ index: true, element: <SignIn /> }],
 	},
+	{
+		path: '/register',
+		element: <RegisterLayout />,
+		children: [{ index: true, element: <Register /> }],
+	},
 ])
 ```
 
 - Index = true no elemento children, significa pegae a mesmo path do elemento pai.  
-  No caso **/** e **/sign-in**, nas respectivas sub-páginas. Caso necessite que carregue só quando for usado um path diferente, remova **index: true** e adicione **path: '/alguma-coisa'**.
+  No caso **/** e **/sign-in** e **/register**, nas respectivas sub-páginas. Caso necessite que carregue só quando for usado um path diferente, remova **index: true** e adicione **path: '/alguma-coisa'**.
 - Perceba que entrando em http://localhost:3001/ que é o "/",
   aparece o conteúdo da página AppLayout, e carrega no local que foi adicionado o Outlet o conteúdo de Home: "Home Page!"
 
     Troque a URL por http://localhost:3001/sign-in e veja carregar
     a outra página AuthLayout e no local do Outlet o conteúdo de SignIn: "SignIn Page!"
+
+    Troque a URL por http://localhost:3001/register e veja carregar
+    a outra página RegisterLayout e no local do Outlet o conteúdo de Register: "Register Page!"
 
 - Podemos ter várias sub-páginas usando sempre: **path, element e children** e usando o **Outlet** dentro delas para carregar o conteúdo desejado no local que quisermos, ex:
 
@@ -770,7 +806,7 @@ children: [
 
 ```sh
 git add .
-git commit -m "feat: add AppLayout and AuthLayout components for routing"
+git commit -m "feat: add AppLayout, AuthLayout and RegisterLayout components for routing"
 git push
 ```
 
@@ -830,13 +866,13 @@ export function ErrorPage() {
 }
 ```
 
-4 - Adicione na primeira rota **/** em **routes.tsx** e mova as 2 rotas existentes para dentro do **children** dessa, mantendo a rota **\*** not found, por último:
+4 - Adicione na primeira rota **/** em **routes.tsx** e mova as 3 rotas existentes para dentro do **children** dessa, mantendo a rota **\*** not found, por último:
 
 ```js
 {
 	path: '/',
 	errorElement: <ErrorPage />,
-	children: [ /* Mova as 2 rotas existentes para cá */ ],
+	children: [ /* Mova as 3 rotas existentes para cá */ ],
 },
 ```
 
@@ -847,9 +883,11 @@ import { createBrowserRouter } from 'react-router'
 
 import { AppLayout } from './pages/_layouts/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
+import { RegisterLayout } from './pages/_layouts/register-layout'
 import { Home } from './pages/app/home'
 import { NotFound } from './pages/e404'
 import { ErrorPage } from './pages/error'
+import { Register } from './pages/register/register'
 import { SignIn } from './pages/auth/sign-in'
 
 export const router = createBrowserRouter([
@@ -866,6 +904,11 @@ export const router = createBrowserRouter([
 				path: '/sign-in',
 				element: <AuthLayout />,
 				children: [{ index: true, element: <SignIn /> }],
+			},
+			{
+				path: '/register',
+				element: <RegisterLayout />,
+				children: [{ index: true, element: <Register /> }],
 			},
 		],
 	},
@@ -887,7 +930,9 @@ import {
 
 import { AppLayout } from './pages/_layouts/app'
 import { AuthLayout } from './pages/_layouts/auth'
+import { RegisterLayout } from './pages/_layouts/register'
 import { Home } from './pages/app/home'
+import { Register } from './pages/register/register'
 import { SignIn } from './pages/auth/sign-in'
 import { NotFound } from './pages/e404'
 import { ErrorPage } from './pages/error'
@@ -900,6 +945,9 @@ export const router = createBrowserRouter(
 			</Route>
 			<Route path='/sign-in' element={<AuthLayout />}>
 				<Route index element={<SignIn />} />
+			</Route>
+			<Route path='/register' element={<RegisterLayout />}>
+				<Route index element={<Register />} />
 			</Route>
 			<Route path='*' element={<NotFound />} />
 		</Route>,
@@ -1032,7 +1080,7 @@ export function App() {
 }
 ```
 
-6 - Nas páginas **home.tsx** e **sign-in.tsx**, adicione o componente **PageTitle**:
+6 - Nas páginas **home.tsx**, **sign-in.tsx** e **register.tsx**, adicione o componente **PageTitle**:
 
 Em Home:
 
@@ -1064,13 +1112,28 @@ export function SignIn() {
 }
 ```
 
+Em Register:
+
+```js
+import { PageTitle } from '@/components/title/page-title'
+
+export function Register() {
+	return (
+		<>
+			<PageTitle title='Register' />
+			<h2>Register Page!</h2>
+		</>
+	)
+}
+```
+
 7 - Rode para verificar:
 
 ```sh
 pnpm dev
 ```
 
-- Perceba os títulos mudando, conforme navega entre as rotas **/** e **/sign-in**.
+- Perceba os títulos mudando, conforme navega entre as rotas **/**, **/sign-in** e **/register**.
 
 8 - Adicione também nas páginas **e404.tsx** e **error.tsx**, usando um fragment na raiz do return para envolver o conteúdo já existente:
 
