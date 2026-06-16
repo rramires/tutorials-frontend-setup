@@ -34,8 +34,8 @@ pnpm dlx shadcn@latest init
 - Ele detecta Vite + Tailwind v4 e o path alias `@/*` (já configurado na Parte 1).
 - O fluxo novo do CLI faz só **2 perguntas** (não pede mais a cor base num passo separado — o preset já define):
 
-  1. **Select a component library** → escolha **`Radix`** (alternativa: `Base`).
-  2. **Which preset would you like to use?** → escolha **`Nova — Lucide / Geist`**.
+    1. **Select a component library** → escolha **`Radix`** (alternativa: `Base`).
+    2. **Which preset would you like to use?** → escolha **`Nova — Lucide / Geist`**.
 
 - O **preset** é só um pacote de defaults visuais (cor base, radius, espaçamento, fonte e biblioteca de ícones) — tudo editável depois no `components.json` e no CSS. **Nova** já casa com **Lucide** (instalado na Parte 1) e usa a base de cor `neutral`. Outros presets: `Vega`, `Maia`, `Lyra`, `Mira`, `Luma`, `Sera`, `Rhea`, `Custom`.
 
@@ -67,19 +67,21 @@ O init instala as dependências (`class-variance-authority`, `clsx`, `tailwind-m
 
 - O `style` (`radix-nova`) e o `baseColor` (`neutral`) vêm das escolhas do init (lib `Radix` + preset `Nova`). Quer outra cor base depois? Edite aqui ou troque os tokens no `global.css`.
 
-> **Aviso — erro de schema no components.json.** A aba PROBLEMS pode mostrar:
-> `Unable to load schema from 'https://ui.shadcn.com/schema.json': Location ... is untrusted.`
-> É só o validador JSON do VSCode bloqueando download de schema de domínio não confiável (não quebra nada). Pra resolver de forma reproduzível, crie **`.vscode/settings.json`** na raiz do projeto:
+> **Aviso — ruídos no PROBLEMS (resolvidos num `.vscode/settings.json`).** Ao longo desta parte aparecem dois avisos chatos do VSCode; os dois são **cosméticos** (não quebram build nem `pnpm lint`). Resolva criando **`.vscode/settings.json`** na raiz do projeto:
 >
 > ```json
 > {
 > 	"json.schemaDownload.trustedDomains": {
 > 		"https://ui.shadcn.com/": true
-> 	}
+> 	},
+> 	"tailwindCSS.lint.suggestCanonicalClasses": "ignore"
 > }
 > ```
 >
-> Alternativa rápida: passe o mouse no erro → quick-fix **"Trust ui.shadcn.com"** (grava no seu User Settings).
+> - **`json.schemaDownload.trustedDomains`** → mata o erro no `components.json`: `Unable to load schema from 'https://ui.shadcn.com/schema.json': ... is untrusted` (o validador JSON do VSCode bloqueia baixar schema de domínio não confiável). Atalho: quick-fix **"Trust ui.shadcn.com"** no hover do erro.
+> - **`tailwindCSS.lint.suggestCanonicalClasses`** → mata o aviso da extensão **Tailwind CSS IntelliSense** que sugere trocar valor arbitrário por classe da escala (ex: _"The class `min-w-[96px]` can be written as `min-w-24`"_). Ele pinga nos componentes gerados pelo shadcn (que usam arbitrários de propósito). `"ignore"` desliga no workspace inteiro.
+>
+> Se preferir não versionar isso no projeto, dá pra pôr as duas chaves no seu **User Settings** e apagar o `.vscode/settings.json` local — funciona igual.
 
 - O shadcn vai instalar os componentes em **components/ui**. Nossos exemplos da Parte 1 ficam em **components/ui-sample** — sem conflito.
 
@@ -133,7 +135,7 @@ O init instala as dependências (`class-variance-authority`, `clsx`, `tailwind-m
 5 - Abra o **src/lib/utils.ts**. Ele tem um erro de organização de imports (do plugin da Parte 1). Basta **salvar** o arquivo que o `simple-import-sort` formata.
 
 ```ts
-import { clsx, type ClassValue } from 'clsx'
+import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -166,47 +168,29 @@ export default defineConfig([
 
 - Com isso o `pnpm lint` volta a passar limpo quando instalarmos componentes.
 
-7 - Comite como:
-
-```sh
-git add .
-git commit -m "feat: install and configure shadcn/ui"
-git push
-```
-
----
-
-### Instalando um componente para teste
-
-1 - Instale o **button**, que também é usado pelos próximos passos:  
+7 - O init com o preset **Nova** já trouxe o **src/components/ui/button.tsx** — **não precisa** rodar `shadcn add button`. (No shadcn antigo o init não trazia componente; o fluxo novo com preset já scaffolda o button.) Graças ao override do passo anterior, ele não acusa erro de lint.  
 [ui.shadcn/button](https://ui.shadcn.com/docs/components/button)
 
-```sh
-pnpm dlx shadcn@latest add button
-```
-
-- Foi criado o **src/components/ui/button.tsx**. Graças ao override do passo anterior, ele não acusa erro de lint.
-
-2 - Para testar, use o botão temporariamente na **pages/app/home.tsx**:
+8 - Para validar, use o botão temporariamente na **pages/app/home.tsx**:
 
 ```tsx
 import { Button } from '@/components/ui/button'
 
 // dentro do return
-<Button variant='outline'>Teste</Button>
+;<Button variant='outline'>Teste</Button>
 ```
 
-3 - Rode e veja o botão:
+9 - Rode e veja o botão:
 
 ```sh
 pnpm dev
 ```
 
-4 - Pode remover o botão de teste da Home depois de validar. Comite como:
+10 - Validado, **remova o botão de teste** da Home. Agora comite toda a configuração do shadcn (init + button) de uma vez:
 
 ```sh
 git add .
-git commit -m "feat: add shadcn button component"
+git commit -m "feat: install and configure shadcn/ui"
 git push
 ```
 
@@ -226,7 +210,11 @@ pnpm dlx shadcn@latest add dropdown-menu
 
 2 - Crie a pasta **components/theme**. Vamos separar em 4 arquivos para não conflitar com o **Fast Refresh** do React (o mesmo motivo da Parte 1): context e hook ficam em **.ts** (sem JSX), provider e toggle em **.tsx**.
 
-Crie **src/components/theme/theme-context.ts**:
+```sh
+mkdir src/components/theme
+```
+
+Crie nessa pasta **theme-context.ts**:
 
 ```ts
 import { createContext } from 'react'
@@ -247,7 +235,7 @@ export const ThemeProviderContext =
 	createContext<ThemeProviderState>(initialState)
 ```
 
-3 - Crie **src/components/theme/theme-hooks.ts** (note as chaves no `throw`, exigidas pela regra `curly` da Parte 1):
+3 - Crie **theme-hooks.ts** (note as chaves no `throw`, exigidas pela regra `curly` da Parte 1):
 
 ```ts
 import { useContext } from 'react'
@@ -265,11 +253,11 @@ export function useTheme() {
 }
 ```
 
-4 - Crie **src/components/theme/theme-provider.tsx**:
+4 - Crie **theme-provider.tsx**:
 
 ```tsx
-import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 
 import { type Theme, ThemeProviderContext } from './theme-context'
 
@@ -324,7 +312,7 @@ export function ThemeProvider({
 }
 ```
 
-5 - Crie **src/components/theme/mode-toggle.tsx** (o seletor em dropdown):
+5 - Crie **mode-toggle.tsx** (o seletor em dropdown):
 
 ```tsx
 import { Moon, Sun } from 'lucide-react'
@@ -379,7 +367,10 @@ import { router } from './routes'
 export function App() {
 	return (
 		<ThemeProvider defaultTheme='system' storageKey='vite-ui-theme'>
-			<TitleProvider titleTemplate='%s | FrontEnd' defaultTitle='FrontEnd'>
+			<TitleProvider
+				titleTemplate='%s | FrontEnd'
+				defaultTitle='FrontEnd'
+			>
 				<RouterProvider router={router} />
 			</TitleProvider>
 		</ThemeProvider>
@@ -393,7 +384,7 @@ export function App() {
 <head>
 	<!-- ... meta, title ... -->
 
-	<!-- Evita o flash de tema errado no primeiro carregamento. -->
+	<!-- Prevents the wrong theme from flashing on first load. -->
 	<script>
 		;(function () {
 			const theme = localStorage.getItem('vite-ui-theme') || 'system'
@@ -405,8 +396,6 @@ export function App() {
 			document.documentElement.classList.add(isDark ? 'dark' : 'light')
 		})()
 	</script>
-
-	<script type="module" src="/src/main.tsx"></script>
 </head>
 ```
 
@@ -435,7 +424,7 @@ import { ModeToggle } from '@/components/theme/mode-toggle'
 
 export function AppLayout() {
 	return (
-		<div className='flex h-screen flex-col bg-background text-foreground'>
+		<div className='bg-background text-foreground flex h-screen flex-col'>
 			<header className='flex h-20 items-center justify-between border-b px-8'>
 				<h1 className='text-3xl font-bold'>AppLayout Header</h1>
 				<ModeToggle />
@@ -444,7 +433,7 @@ export function AppLayout() {
 				{/* Content will change here */}
 				<Outlet />
 			</main>
-			<footer className='flex h-12 items-center border-t px-8 text-muted-foreground'>
+			<footer className='text-muted-foreground flex h-12 items-center border-t px-8'>
 				<p>AppLayout Footer</p>
 			</footer>
 		</div>
@@ -509,7 +498,13 @@ pnpm add react-hook-form zod @hookform/resolvers
 pnpm dlx shadcn@latest add input label
 ```
 
-3 - Mova o **sign-in** para uma pasta própria. Crie **src/pages/auth/sign-in/use-sign-in-pm.ts** (a lógica):
+3 - Mova o **sign-in** para uma pasta própria. Crie a pasta:
+
+```sh
+mkdir src/pages/auth/sign-in
+```
+
+Crie **src/pages/auth/sign-in/use-sign-in-pm.ts** (a lógica):
 
 ```ts
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -580,7 +575,7 @@ export function SignIn() {
 								{...pm.register('email')}
 							/>
 							{pm.errors.email && (
-								<p className='text-sm text-destructive'>
+								<p className='text-destructive text-sm'>
 									{pm.errors.email.message}
 								</p>
 							)}
@@ -594,7 +589,7 @@ export function SignIn() {
 								{...pm.register('password')}
 							/>
 							{pm.errors.password && (
-								<p className='text-sm text-destructive'>
+								<p className='text-destructive text-sm'>
 									{pm.errors.password.message}
 								</p>
 							)}
@@ -687,9 +682,13 @@ export function Register() {
 					<form onSubmit={pm.handleSubmit} className='space-y-4'>
 						<div className='space-y-2'>
 							<Label htmlFor='name'>Nome</Label>
-							<Input id='name' type='text' {...pm.register('name')} />
+							<Input
+								id='name'
+								type='text'
+								{...pm.register('name')}
+							/>
 							{pm.errors.name && (
-								<p className='text-sm text-destructive'>
+								<p className='text-destructive text-sm'>
 									{pm.errors.name.message}
 								</p>
 							)}
@@ -703,7 +702,7 @@ export function Register() {
 								{...pm.register('email')}
 							/>
 							{pm.errors.email && (
-								<p className='text-sm text-destructive'>
+								<p className='text-destructive text-sm'>
 									{pm.errors.email.message}
 								</p>
 							)}
@@ -717,21 +716,23 @@ export function Register() {
 								{...pm.register('password')}
 							/>
 							{pm.errors.password && (
-								<p className='text-sm text-destructive'>
+								<p className='text-destructive text-sm'>
 									{pm.errors.password.message}
 								</p>
 							)}
 						</div>
 
 						<div className='space-y-2'>
-							<Label htmlFor='confirmPassword'>Confirmar senha</Label>
+							<Label htmlFor='confirmPassword'>
+								Confirmar senha
+							</Label>
 							<Input
 								id='confirmPassword'
 								type='password'
 								{...pm.register('confirmPassword')}
 							/>
 							{pm.errors.confirmPassword && (
-								<p className='text-sm text-destructive'>
+								<p className='text-destructive text-sm'>
 									{pm.errors.confirmPassword.message}
 								</p>
 							)}
