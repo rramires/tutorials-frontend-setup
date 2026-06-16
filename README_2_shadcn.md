@@ -32,20 +32,28 @@ pnpm dlx shadcn@latest init
 ```
 
 - Ele detecta Vite + Tailwind v4 e o path alias `@/*` (já configurado na Parte 1).
-- Quando perguntar a cor base, escolha **Slate** (combina com o resto do tutorial):  
-  [ui.shadcn/colors](https://ui.shadcn.com/colors)
-- Caso pergunte onde está o CSS global, aponte para **src/global.css**.
+- O fluxo novo do CLI faz só **2 perguntas** (não pede mais a cor base num passo separado — o preset já define):
 
-O init instala as dependências (`class-variance-authority`, `clsx`, `tailwind-merge`, `tw-animate-css`), cria o **components.json**, o **src/lib/utils.ts** (com a função `cn`) e **regenera o global.css** com os tokens de cor.
+  1. **Select a component library** → escolha **`Radix`** (alternativa: `Base`).
+  2. **Which preset would you like to use?** → escolha **`Nova — Lucide / Geist`**.
+
+- O **preset** é só um pacote de defaults visuais (cor base, radius, espaçamento, fonte e biblioteca de ícones) — tudo editável depois no `components.json` e no CSS. **Nova** já casa com **Lucide** (instalado na Parte 1) e usa a base de cor `neutral`. Outros presets: `Vega`, `Maia`, `Lyra`, `Mira`, `Luma`, `Sera`, `Rhea`, `Custom`.
+
+> **Dica — base color.** O `baseColor` define o tom neutro (cinza) do tema. As opções atuais são `neutral`, `stone`, `zinc`, `mauve`, `olive`, `mist`, `taupe` (o antigo `slate` foi removido). Vamos de **`neutral`** aqui. Pra ver os tons ao vivo antes de decidir: [ui.shadcn.com/create](https://ui.shadcn.com/create). Trocar depois **não** é só mudar o `components.json` — os tokens já ficam "assados" no `global.css`; re-rode o `init` pra regenerar, ou substitua os blocos `:root`/`.dark` à mão.
+
+O init instala as dependências (`class-variance-authority`, `clsx`, `tailwind-merge`, `tw-animate-css`, **`radix-ui`** — o pacote unificado dos primitivos, e **`@fontsource-variable/geist`** — a fonte que o preset Nova usa), cria o **components.json**, o **src/lib/utils.ts** (com a função `cn`) e **regenera o global.css** com os tokens de cor e a fonte.
+
+> **Fonte Geist.** O preset **Nova** já configura a fonte **Geist** sozinho: instala `@fontsource-variable/geist`, importa no `global.css` e aplica `--font-sans: 'Geist Variable'` no `<html>`. Não precisa fazer nada — a tipografia do app já muda.
 
 2 - Veja o **components.json** criado. O importante:
 
 ```json
 {
+	"style": "radix-nova",
 	"tailwind": {
 		"config": "",
 		"css": "src/global.css",
-		"baseColor": "slate",
+		"baseColor": "neutral",
 		"cssVariables": true
 	},
 	"aliases": {
@@ -57,6 +65,22 @@ O init instala as dependências (`class-variance-authority`, `clsx`, `tailwind-m
 }
 ```
 
+- O `style` (`radix-nova`) e o `baseColor` (`neutral`) vêm das escolhas do init (lib `Radix` + preset `Nova`). Quer outra cor base depois? Edite aqui ou troque os tokens no `global.css`.
+
+> **Aviso — erro de schema no components.json.** A aba PROBLEMS pode mostrar:
+> `Unable to load schema from 'https://ui.shadcn.com/schema.json': Location ... is untrusted.`
+> É só o validador JSON do VSCode bloqueando download de schema de domínio não confiável (não quebra nada). Pra resolver de forma reproduzível, crie **`.vscode/settings.json`** na raiz do projeto:
+>
+> ```json
+> {
+> 	"json.schemaDownload.trustedDomains": {
+> 		"https://ui.shadcn.com/": true
+> 	}
+> }
+> ```
+>
+> Alternativa rápida: passe o mouse no erro → quick-fix **"Trust ui.shadcn.com"** (grava no seu User Settings).
+
 - O shadcn vai instalar os componentes em **components/ui**. Nossos exemplos da Parte 1 ficam em **components/ui-sample** — sem conflito.
 
 3 - Abra o **global.css**. Ele foi reescrito pelo shadcn e agora contém bastante coisa:
@@ -64,30 +88,42 @@ O init instala as dependências (`class-variance-authority`, `clsx`, `tailwind-m
 ```css
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
 @custom-variant dark (&:is(.dark *));
 
+@theme inline {
+	--font-sans: 'Geist Variable', sans-serif;
+	--font-heading: var(--font-sans);
+	/* mapeia os tokens para utilities: --color-background, --color-primary, ... */
+	/* + escala de radius: --radius-sm ... --radius-4xl */
+}
+
 :root {
-	/* tokens do tema claro: --background, --foreground, --primary, ... */
+	/* tokens do tema claro: --background, --foreground, --primary, --radius, sidebar, chart... */
 }
 
 .dark {
-	/* tokens do tema escuro */
-}
-
-@theme inline {
-	/* mapeia os tokens para utilities: --color-background, ... */
+	/* tokens do tema escuro (mesmos nomes, valores invertidos) */
 }
 
 @layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
 	body {
 		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
 	}
 }
 ```
 
-- Note que o shadcn **já adiciona** a linha `@custom-variant dark` — não precisamos mais adicionar manualmente.
-- O `@layer base` já deixa o `body` com `bg-background text-foreground`, então a página inteira responde ao tema.
+- Repare nos imports a mais que o init novo adiciona: **`shadcn/tailwind.css`** (estilos base do shadcn) e **`@fontsource-variable/geist`** (a fonte do preset Nova).
+- O shadcn **já adiciona** o `@custom-variant dark` — não precisamos mais adicionar manualmente.
+- O `@layer base` deixa o `body` com `bg-background text-foreground` e o `html` com `font-sans` (Geist), então a página inteira já responde ao tema e usa a fonte nova.
 
 4 - O global.css vai mostrar **erros falsos** na aba PROBLEMS (`@custom-variant`, `@theme`, `@apply` não são reconhecidos pelo validador de CSS padrão do VSCode). Para resolver, instale a extensão:  
 [PostCSS Language Support](https://marketplace.visualstudio.com/items?itemName=csstools.postcss)
