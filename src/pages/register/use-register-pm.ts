@@ -2,9 +2,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const passwordMin = Number(import.meta.env.VITE_PASSWORD_MIN_LENGTH)
-const passwordPattern = new RegExp(import.meta.env.VITE_PASSWORD_PATTERN)
-const passwordMessage = import.meta.env.VITE_PASSWORD_MESSAGE
+import { env } from '@/env'
+
+const passwordMin = env.VITE_PASSWORD_MIN_LENGTH
+const passwordPattern = new RegExp(env.VITE_PASSWORD_PATTERN)
+const passwordMessage = env.VITE_PASSWORD_MESSAGE
 
 const registerForm = z
 	.object({
