@@ -1,7 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { registerAccount } from '@/api/register'
 import { env } from '@/env'
 
 const passwordMin = env.VITE_PASSWORD_MIN_LENGTH
@@ -32,6 +37,8 @@ const registerForm = z
 type RegisterForm = z.infer<typeof registerForm>
 
 export function useRegisterPM() {
+	const navigate = useNavigate()
+
 	const {
 		register,
 		handleSubmit,
@@ -40,9 +47,21 @@ export function useRegisterPM() {
 		resolver: zodResolver(registerForm),
 	})
 
-	function onSubmit(data: RegisterForm) {
-		// no backend yet - here I would call a registration service
-		console.log(data)
+	const { mutateAsync: createAccount } = useMutation({
+		mutationFn: registerAccount,
+	})
+
+	async function onSubmit({ username, email, password }: RegisterForm) {
+		try {
+			await createAccount({ username, email, password })
+			toast.success('Account created. You can sign in now.')
+			navigate('/sign-in')
+		} catch (err) {
+			const message =
+				(isAxiosError(err) && err.response?.data?.message) ||
+				'Could not create account.'
+			toast.error(message)
+		}
 	}
 
 	return {

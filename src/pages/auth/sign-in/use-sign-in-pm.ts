@@ -1,6 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router'
+import { toast } from 'sonner'
 import { z } from 'zod'
+
+import { signIn } from '@/api/sign-in'
 
 const signInForm = z.object({
 	identifier: z.string().min(1, 'Enter your email or username.'),
@@ -13,6 +19,8 @@ const signInForm = z.object({
 type SignInForm = z.infer<typeof signInForm>
 
 export function useSignInPM() {
+	const navigate = useNavigate()
+
 	const {
 		register,
 		handleSubmit,
@@ -21,9 +29,21 @@ export function useSignInPM() {
 		resolver: zodResolver(signInForm),
 	})
 
-	function onSubmit(data: SignInForm) {
-		// No backend yet - here I would call an authentication service
-		console.log(data)
+	const { mutateAsync: authenticate } = useMutation({
+		mutationFn: signIn,
+	})
+
+	async function onSubmit(data: SignInForm) {
+		try {
+			await authenticate(data)
+			toast.success('Signed in successfully.')
+			navigate('/')
+		} catch (err) {
+			const message =
+				(isAxiosError(err) && err.response?.data?.message) ||
+				'Could not sign in.'
+			toast.error(message)
+		}
 	}
 
 	return {
