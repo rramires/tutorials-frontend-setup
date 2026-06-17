@@ -10,21 +10,21 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-import { useRegisterPM } from './use-register-pm'
+import { useSignInPM } from './use-sign-in-pm'
 
-export function Register() {
-	const pm = useRegisterPM()
+export function SignIn() {
+	const pm = useSignInPM()
 
 	return (
 		<>
-			<PageTitle title='Register' />
+			<PageTitle title='Sign In' />
 
 			<div className='flex flex-1 items-center justify-center p-8'>
 				<Card className='w-full max-w-sm'>
 					<CardHeader>
-						<CardTitle>Create account</CardTitle>
+						<CardTitle>Sign in</CardTitle>
 						<CardDescription>
-							Fill in the fields to create your account.
+							Enter your credentials to access your account.
 						</CardDescription>
 					</CardHeader>
 
@@ -32,31 +32,18 @@ export function Register() {
 						<form onSubmit={pm.handleSubmit}>
 							<div className='flex flex-col gap-6'>
 								<div className='grid gap-2'>
-									<Label htmlFor='username'>Username</Label>
+									<Label htmlFor='identifier'>
+										Email or username
+									</Label>
 									<Input
-										id='username'
+										id='identifier'
 										type='text'
-										placeholder='your_username'
-										{...pm.register('username')}
+										placeholder='you@example.com or username'
+										{...pm.register('identifier')}
 									/>
-									{pm.errors.username && (
+									{pm.errors.identifier && (
 										<p className='text-destructive text-sm'>
-											{pm.errors.username.message}
-										</p>
-									)}
-								</div>
-
-								<div className='grid gap-2'>
-									<Label htmlFor='email'>Email</Label>
-									<Input
-										id='email'
-										type='email'
-										placeholder='m@example.com'
-										{...pm.register('email')}
-									/>
-									{pm.errors.email && (
-										<p className='text-destructive text-sm'>
-											{pm.errors.email.message}
+											{pm.errors.identifier.message}
 										</p>
 									)}
 								</div>
@@ -75,28 +62,12 @@ export function Register() {
 									)}
 								</div>
 
-								<div className='grid gap-2'>
-									<Label htmlFor='confirmPassword'>
-										Confirm password
-									</Label>
-									<Input
-										id='confirmPassword'
-										type='password'
-										{...pm.register('confirmPassword')}
-									/>
-									{pm.errors.confirmPassword && (
-										<p className='text-destructive text-sm'>
-											{pm.errors.confirmPassword.message}
-										</p>
-									)}
-								</div>
-
 								<Button
 									type='submit'
 									disabled={pm.isSubmitting}
 									className='w-full'
 								>
-									Sign up
+									Sign in
 								</Button>
 							</div>
 						</form>
