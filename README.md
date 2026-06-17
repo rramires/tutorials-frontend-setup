@@ -1397,15 +1397,15 @@ e
 			<form onSubmit={handleSubmit} className='space-y-4'>
 				<div>
 					<label
-						htmlFor='name'
+						htmlFor='username'
 						className='mb-1 block text-sm font-medium'
 					>
-						Name
+						Username
 					</label>
 					<input
-						id='name'
+						id='username'
 						type='text'
-						placeholder='Enter your name'
+						placeholder='Enter your username'
 						className='w-full rounded-md border border-slate-600 bg-slate-700 px-4 py-2 text-slate-100 placeholder-slate-400 focus:border-slate-500 focus:ring-1 focus:ring-slate-500 focus:outline-hidden'
 						required
 					/>

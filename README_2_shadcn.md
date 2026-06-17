@@ -5,7 +5,7 @@ Continuação da Parte 1 (**README.md**). Pré-requisito: o projeto já configur
 Nesta parte vamos adicionar:
 
 - **shadcn/ui** (componentes prontos, Radix + Tailwind, código dentro do projeto)
-- **Tema claro/escuro** com seletor (dropdown Claro/Escuro/Sistema)
+- **Tema claro/escuro** com seletor (dropdown Light/Dark/System)
 - **Tokens semânticos** de cor nos layouts (sem `dark:` espalhado)
 - **Formulários** com React Hook Form + Zod, no padrão **Presentation Model**
 
@@ -177,7 +177,7 @@ export default defineConfig([
 import { Button } from '@/components/ui/button'
 
 // dentro do return
-;<Button variant='outline'>Teste</Button>
+;<Button variant='outline'>Test</Button>
 ```
 
 9 - Rode e veja o botão:
@@ -198,7 +198,7 @@ git push
 
 ### Alternância de tema claro e escuro
 
-- Vamos usar a abordagem oficial do shadcn para Vite, com um seletor de **dropdown** (Claro / Escuro / Sistema).  
+- Vamos usar a abordagem oficial do shadcn para Vite, com um seletor de **dropdown** (Light / Dark / System).  
   [Dark Mode — Vite](https://ui.shadcn.com/docs/dark-mode/vite)
 - O `global.css` já tem o suporte a dark mode (passo da seção anterior), então não precisa mexer no CSS.
 
@@ -336,18 +336,18 @@ export function ModeToggle() {
 				<Button variant='outline' size='icon'>
 					<Sun className='h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
 					<Moon className='absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
-					<span className='sr-only'>Alternar tema</span>
+					<span className='sr-only'>Switch theme</span>
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end'>
 				<DropdownMenuItem onClick={() => setTheme('light')}>
-					Claro
+					Light
 				</DropdownMenuItem>
 				<DropdownMenuItem onClick={() => setTheme('dark')}>
-					Escuro
+					Dark
 				</DropdownMenuItem>
 				<DropdownMenuItem onClick={() => setTheme('system')}>
-					Sistema
+					System
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
@@ -458,7 +458,45 @@ export function Home() {
 }
 ```
 
-3 - Aplique o mesmo nos outros layouts (**auth-layout.tsx** e **register-layout.tsx**): troque `bg-slate-*`/`text-slate-*` por `bg-background`/`text-foreground` e bordas por `border`.
+3 - Aplique o mesmo nos outros dois layouts: troque `bg-slate-*`/`text-slate-*` pelos tokens e use `border-b`/`border-t` no lugar das barras sólidas. Esses **não** levam `ModeToggle` (só o app autenticado tem).
+
+**pages/\_layouts/auth-layout.tsx**:
+
+```tsx
+import { Outlet } from 'react-router'
+
+export function AuthLayout() {
+	return (
+		<div className='bg-background text-foreground flex h-screen flex-col'>
+			<header className='flex h-8 items-center border-b pl-8'></header>
+			<main className='flex flex-1'>
+				{/* Content will change here */}
+				<Outlet />
+			</main>
+			<footer className='flex h-8 items-center border-t pl-8'></footer>
+		</div>
+	)
+}
+```
+
+**pages/\_layouts/register-layout.tsx**:
+
+```tsx
+import { Outlet } from 'react-router'
+
+export function RegisterLayout() {
+	return (
+		<div className='bg-background text-foreground flex h-screen flex-col'>
+			<header className='flex h-8 items-center border-b pl-8'></header>
+			<main className='flex flex-1'>
+				{/* Content will change here */}
+				<Outlet />
+			</main>
+			<footer className='flex h-8 items-center border-t pl-8'></footer>
+		</div>
+	)
+}
+```
 
 4 - Rode e teste o seletor:
 
@@ -466,7 +504,7 @@ export function Home() {
 pnpm dev
 ```
 
-- Clique no ícone do header → Claro / Escuro / Sistema.
+- Clique no ícone do header → Light / Dark / System.
 - Recarregue em modo escuro → sem flash.
 - DevTools → Application → Local Storage → a chave `vite-ui-theme`.
 
@@ -482,7 +520,7 @@ git push
 
 ### Formulários com React Hook Form, Zod e Presentation Model
 
-- Vamos refazer os formulários (**sign-in** e **register**) com **React Hook Form** (estado/submit) + **Zod** (validação tipada), no padrão **Presentation Model**: o `.tsx` fica só com a marcação e toda a lógica vai para um hook `useXPM`.
+- Vamos refazer os formulários (**sign-in** e **register**) com **React Hook Form** (estado/submit) + **Zod** (validação tipada), no padrão **Presentation Model**: o `.tsx` fica só com a marcação (usando o componente **Card** do shadcn, como no [block de login](https://ui.shadcn.com/blocks/login)) e toda a lógica vai para um hook `useXPM`.
 
 > **Presentation Model:** componente **com lógica** vira uma pasta própria com `x.tsx` (marcação) + `use-x-pm.ts` (lógica). Componente **sem lógica** (Home, páginas de erro, layouts) continua um `.tsx` simples. Bônus: o hook em `.ts` (sem componente) + a marcação em `.tsx` (só componente) satisfazem o Fast Refresh por construção, e o RHF dispensa tipar o evento de submit (nada de `React.FormEvent`, que é deprecated no React 19).
 
@@ -492,10 +530,10 @@ git push
 pnpm add react-hook-form zod @hookform/resolvers
 ```
 
-2 - Instale os componentes shadcn de formulário:
+2 - Instale os componentes shadcn usados nos formulários (`input`, `label` e `card`):
 
 ```sh
-pnpm dlx shadcn@latest add input label
+pnpm dlx shadcn@latest add input label card
 ```
 
 3 - Mova o **sign-in** para uma pasta própria. Crie a pasta:
@@ -504,7 +542,7 @@ pnpm dlx shadcn@latest add input label
 mkdir src/pages/auth/sign-in
 ```
 
-Crie **src/pages/auth/sign-in/use-sign-in-pm.ts** (a lógica):
+Crie nessa pasta **use-sign-in-pm.ts** (a lógica):
 
 ```ts
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -512,8 +550,11 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const signInForm = z.object({
-	email: z.email('Informe um e-mail válido.'),
-	password: z.string().min(6, 'Mínimo de 6 caracteres.'),
+	identifier: z.string().min(1, 'Enter your email or username.'),
+	password: z
+		.string()
+		.min(1, 'Password is required.')
+		.max(72, 'Maximum of 72 characters.'),
 })
 
 type SignInForm = z.infer<typeof signInForm>
@@ -528,7 +569,7 @@ export function useSignInPM() {
 	})
 
 	function onSubmit(data: SignInForm) {
-		// sem backend ainda — aqui chamaria um service de autenticação
+		// No backend yet - here I would call an authentication service
 		console.log(data)
 	}
 
@@ -542,12 +583,20 @@ export function useSignInPM() {
 ```
 
 - O `z.infer<typeof signInForm>` deriva o tipo do schema — uma única fonte de verdade para validação e tipagem.
+- O campo `identifier` aceita **email ou username** (espelha o `POST /auth/login` do backend), por isso é `z.string()` e não `z.email()`. Os limites (`min`/`max`/regex) batem com os controllers da API: register exige `username` 3–30 `[a-zA-Z0-9_]` e `password` min 8; login só exige presença, max 72 (teto do bcrypt). O `username` é normalizado pra minúsculo com `.transform` (igual ao backend); o `identifier` do login **não** é tocado no front — o backend decide (com `@` = email, mantém a caixa; sem `@` = username, vira minúsculo).
 
-4 - Crie **src/pages/auth/sign-in/sign-in.tsx** (só marcação, consumindo o hook):
+4 - Crie também **sign-in.tsx** (só marcação, consumindo o hook):
 
 ```tsx
 import { PageTitle } from '@/components/title/page-title'
 import { Button } from '@/components/ui/button'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -561,73 +610,131 @@ export function SignIn() {
 			<PageTitle title='Sign In' />
 
 			<div className='flex flex-1 items-center justify-center p-8'>
-				<div className='w-full max-w-md space-y-6'>
-					<h2 className='text-center text-2xl font-semibold tracking-tight'>
-						Acessar conta
-					</h2>
+				<Card className='w-full max-w-sm'>
+					<CardHeader>
+						<CardTitle>Sign in</CardTitle>
+						<CardDescription>
+							Enter your credentials to access your account.
+						</CardDescription>
+					</CardHeader>
 
-					<form onSubmit={pm.handleSubmit} className='space-y-4'>
-						<div className='space-y-2'>
-							<Label htmlFor='email'>E-mail</Label>
-							<Input
-								id='email'
-								type='email'
-								{...pm.register('email')}
-							/>
-							{pm.errors.email && (
-								<p className='text-destructive text-sm'>
-									{pm.errors.email.message}
-								</p>
-							)}
-						</div>
+					<CardContent>
+						<form onSubmit={pm.handleSubmit} noValidate>
+							<div className='flex flex-col gap-6'>
+								<div className='grid gap-2'>
+									<Label htmlFor='identifier'>
+										Email or username
+									</Label>
+									<Input
+										id='identifier'
+										type='text'
+										placeholder='you@example.com or username'
+										{...pm.register('identifier')}
+									/>
+									{pm.errors.identifier && (
+										<p className='text-destructive text-sm'>
+											{pm.errors.identifier.message}
+										</p>
+									)}
+								</div>
 
-						<div className='space-y-2'>
-							<Label htmlFor='password'>Senha</Label>
-							<Input
-								id='password'
-								type='password'
-								{...pm.register('password')}
-							/>
-							{pm.errors.password && (
-								<p className='text-destructive text-sm'>
-									{pm.errors.password.message}
-								</p>
-							)}
-						</div>
+								<div className='grid gap-2'>
+									<Label htmlFor='password'>Password</Label>
+									<Input
+										id='password'
+										type='password'
+										{...pm.register('password')}
+									/>
+									{pm.errors.password && (
+										<p className='text-destructive text-sm'>
+											{pm.errors.password.message}
+										</p>
+									)}
+								</div>
 
-						<Button
-							type='submit'
-							disabled={pm.isSubmitting}
-							className='w-full'
-						>
-							Entrar
-						</Button>
-					</form>
-				</div>
+								<Button
+									type='submit'
+									disabled={pm.isSubmitting}
+									className='w-full'
+								>
+									Sign in
+								</Button>
+							</div>
+						</form>
+					</CardContent>
+				</Card>
 			</div>
 		</>
 	)
 }
 ```
 
+- O `noValidate` no `<form>` desliga a validação nativa do navegador (os balões do Chrome tipo _"Please include an '@'…"_ que o `type='email'`/`required` disparam). Assim o **Zod vira a única fonte de validação** — mensagens consistentes, em inglês, sem a UI dupla do browser.
 - Apague o antigo **src/pages/auth/sign-in.tsx** (foi substituído pela pasta).
 
-5 - Faça o mesmo com o **register**. A pasta **pages/register** já existe — só adicione o hook **src/pages/register/use-register-pm.ts** (note o `.refine` checando se as senhas conferem):
+5 - Configure as **variáveis de ambiente** do Vite para a política de senha (mesma ideia do `.env` do backend — centraliza os valores). Crie um **`.env`** na raiz:
+
+```sh
+VITE_PASSWORD_MIN_LENGTH=8
+VITE_PASSWORD_PATTERN=^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$
+VITE_PASSWORD_MESSAGE=Must include upper- and lowercase, a number and a special character.
+```
+
+> **`VITE_*` é PÚBLICO.** O Vite injeta o valor no bundle do cliente no build — qualquer um lê no JS. Use `VITE_` só pra config **não-secreta** (a política de senha é pública mesmo). **Nunca** ponha segredo (chave de API, JWT) aqui — isso é papel do `.env` do **backend** (privado). Continua sendo validação de **UX**; o backend é a fronteira.
+
+Crie também **`src/vite-env.d.ts`** pra tipar as vars (todo `VITE_*` chega como **string** — daí o `Number(...)` e `new RegExp(...)` no hook):
+
+```ts
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+	readonly VITE_PASSWORD_MIN_LENGTH: string
+	readonly VITE_PASSWORD_PATTERN: string
+	readonly VITE_PASSWORD_MESSAGE: string
+}
+interface ImportMeta {
+	readonly env: ImportMetaEnv
+}
+```
+
+- **Reinicie o `pnpm dev`** sempre que mexer no `.env` — o Vite só lê no boot.
+- Siga o padrão de env: **gitignore o `.env`** e versione um **`.env.example`** (template, mesmas chaves) — igual ao backend. O `.env.example` vai pro git; o `.env` real não. No **`.gitignore`** adicione:
+
+```sh
+# Environment Variables (keep .env.example)
+.env
+.env.*.local
+```
+
+6 - Faça o mesmo com o **register**. A pasta **pages/register** já existe — só adicione o hook **use-register-pm.ts** (consome as vars do `.env`; note o `.refine` checando se as senhas conferem):
 
 ```ts
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+const passwordMin = Number(import.meta.env.VITE_PASSWORD_MIN_LENGTH)
+const passwordPattern = new RegExp(import.meta.env.VITE_PASSWORD_PATTERN)
+const passwordMessage = import.meta.env.VITE_PASSWORD_MESSAGE
+
 const registerForm = z
 	.object({
-		name: z.string().min(2, 'Informe seu nome.'),
-		email: z.email('Informe um e-mail válido.'),
-		password: z.string().min(6, 'Mínimo de 6 caracteres.'),
+		username: z
+			.string()
+			.min(3, 'Minimum of 3 characters.')
+			.max(30, 'Maximum of 30 characters.')
+			.regex(/^[a-zA-Z0-9_]+$/, 'Letters, numbers and underscore only.')
+			.transform((s) => s.toLowerCase()),
+		email: z.email('Enter a valid email.'),
+		password: z
+			.string()
+			.min(passwordMin, `Minimum of ${passwordMin} characters.`)
+			.max(72, 'Maximum of 72 characters.')
+			.regex(passwordPattern, passwordMessage),
 		confirmPassword: z.string(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
-		message: 'As senhas não conferem.',
+		message: 'Passwords do not match.',
 		path: ['confirmPassword'],
 	})
 
@@ -643,7 +750,7 @@ export function useRegisterPM() {
 	})
 
 	function onSubmit(data: RegisterForm) {
-		// sem backend ainda
+		// no backend yet - here I would call a registration service
 		console.log(data)
 	}
 
@@ -656,11 +763,18 @@ export function useRegisterPM() {
 }
 ```
 
-6 - Reescreva **src/pages/register/register.tsx** (só marcação):
+7 - Reescreva **src/pages/register/register.tsx** (só marcação):
 
 ```tsx
 import { PageTitle } from '@/components/title/page-title'
 import { Button } from '@/components/ui/button'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
@@ -674,86 +788,95 @@ export function Register() {
 			<PageTitle title='Register' />
 
 			<div className='flex flex-1 items-center justify-center p-8'>
-				<div className='w-full max-w-md space-y-6'>
-					<h2 className='text-center text-2xl font-semibold tracking-tight'>
-						Criar conta
-					</h2>
+				<Card className='w-full max-w-sm'>
+					<CardHeader>
+						<CardTitle>Create account</CardTitle>
+						<CardDescription>
+							Fill in the fields to create your account.
+						</CardDescription>
+					</CardHeader>
 
-					<form onSubmit={pm.handleSubmit} className='space-y-4'>
-						<div className='space-y-2'>
-							<Label htmlFor='name'>Nome</Label>
-							<Input
-								id='name'
-								type='text'
-								{...pm.register('name')}
-							/>
-							{pm.errors.name && (
-								<p className='text-destructive text-sm'>
-									{pm.errors.name.message}
-								</p>
-							)}
-						</div>
+					<CardContent>
+						<form onSubmit={pm.handleSubmit} noValidate>
+							<div className='flex flex-col gap-6'>
+								<div className='grid gap-2'>
+									<Label htmlFor='username'>Username</Label>
+									<Input
+										id='username'
+										type='text'
+										placeholder='your_username'
+										{...pm.register('username')}
+									/>
+									{pm.errors.username && (
+										<p className='text-destructive text-sm'>
+											{pm.errors.username.message}
+										</p>
+									)}
+								</div>
 
-						<div className='space-y-2'>
-							<Label htmlFor='email'>E-mail</Label>
-							<Input
-								id='email'
-								type='email'
-								{...pm.register('email')}
-							/>
-							{pm.errors.email && (
-								<p className='text-destructive text-sm'>
-									{pm.errors.email.message}
-								</p>
-							)}
-						</div>
+								<div className='grid gap-2'>
+									<Label htmlFor='email'>Email</Label>
+									<Input
+										id='email'
+										type='email'
+										placeholder='m@example.com'
+										{...pm.register('email')}
+									/>
+									{pm.errors.email && (
+										<p className='text-destructive text-sm'>
+											{pm.errors.email.message}
+										</p>
+									)}
+								</div>
 
-						<div className='space-y-2'>
-							<Label htmlFor='password'>Senha</Label>
-							<Input
-								id='password'
-								type='password'
-								{...pm.register('password')}
-							/>
-							{pm.errors.password && (
-								<p className='text-destructive text-sm'>
-									{pm.errors.password.message}
-								</p>
-							)}
-						</div>
+								<div className='grid gap-2'>
+									<Label htmlFor='password'>Password</Label>
+									<Input
+										id='password'
+										type='password'
+										{...pm.register('password')}
+									/>
+									{pm.errors.password && (
+										<p className='text-destructive text-sm'>
+											{pm.errors.password.message}
+										</p>
+									)}
+								</div>
 
-						<div className='space-y-2'>
-							<Label htmlFor='confirmPassword'>
-								Confirmar senha
-							</Label>
-							<Input
-								id='confirmPassword'
-								type='password'
-								{...pm.register('confirmPassword')}
-							/>
-							{pm.errors.confirmPassword && (
-								<p className='text-destructive text-sm'>
-									{pm.errors.confirmPassword.message}
-								</p>
-							)}
-						</div>
+								<div className='grid gap-2'>
+									<Label htmlFor='confirmPassword'>
+										Confirm password
+									</Label>
+									<Input
+										id='confirmPassword'
+										type='password'
+										{...pm.register('confirmPassword')}
+									/>
+									{pm.errors.confirmPassword && (
+										<p className='text-destructive text-sm'>
+											{pm.errors.confirmPassword.message}
+										</p>
+									)}
+								</div>
 
-						<Button
-							type='submit'
-							disabled={pm.isSubmitting}
-							className='w-full'
-						>
-							Cadastrar
-						</Button>
-					</form>
-				</div>
+								<Button
+									type='submit'
+									disabled={pm.isSubmitting}
+									className='w-full'
+								>
+									Sign up
+								</Button>
+							</div>
+						</form>
+					</CardContent>
+				</Card>
 			</div>
 		</>
 	)
 }
 ```
 
-7 - Ajuste os imports no **src/routes.tsx**:
+8 - Ajuste os imports no **src/routes.tsx**:
 
 ```ts
 // sign-in foi para uma subpasta:
@@ -762,7 +885,7 @@ import { SignIn } from './pages/auth/sign-in/sign-in'
 import { Register } from './pages/register/register'
 ```
 
-8 - Rode e teste a validação (submeta vazio, e-mail inválido, senha curta, senhas diferentes):
+9 - Rode e teste a validação. No **register**: username curto (< 3) ou com caractere inválido (ex: `@`), e-mail inválido, senha curta (< 8) ou sem complexidade (ex: `password` — falta maiúscula/número/especial), senhas diferentes. No **sign-in**: submeta com `identifier`/senha vazios:
 
 ```sh
 pnpm dev
@@ -770,7 +893,7 @@ pnpm dev
 
 - Sem backend, o submit válido só faz `console.log(data)` — veja no console do navegador.
 
-9 - Comite como:
+10 - Comite como:
 
 ```sh
 git add .
