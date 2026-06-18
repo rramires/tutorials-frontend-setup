@@ -19,6 +19,8 @@ export default defineConfig({
 		globals: true,
 		environment: 'happy-dom',
 		setupFiles: ['./test/setup.ts'],
+		// Unit tests live next to the code; Playwright owns `test/*.spec.ts`.
+		include: ['src/**/*.spec.{ts,tsx}'],
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'html'],

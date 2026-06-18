@@ -8,7 +8,13 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 
 export default defineConfig([
-	globalIgnores(['dist', 'coverage', 'public/mockServiceWorker.js']),
+	globalIgnores([
+		'dist',
+		'coverage',
+		'test-results',
+		'playwright-report',
+		'public/mockServiceWorker.js',
+	]),
 	{
 		files: ['**/*.{ts,tsx}'],
 		plugins: {
