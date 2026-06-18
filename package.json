@@ -12,6 +12,7 @@
     "pree2e": "fuser -k 5001/tcp 2>/dev/null || true",
     "e2e": "playwright test",
     "e2e:ui": "PLAYWRIGHT_SLOW_UI=true playwright test --ui",
+    "killapp": "fuser -k 3001/tcp 5001/tcp 4173/tcp 2>/dev/null; pkill -f '[p]laywright.*test-server' 2>/dev/null; pkill -f '[m]s-playwright' 2>/dev/null; echo 'killapp: freed 3001/5001/4173 + killed stray playwright procs'",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
