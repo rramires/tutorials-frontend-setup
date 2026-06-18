@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "dev:test": "vite --mode test --port 5001",
+    "test": "vitest",
+    "test:run": "vitest run",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
