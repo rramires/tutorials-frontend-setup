@@ -1,11 +1,5 @@
 import { MailWarning } from 'lucide-react'
 
-import {
-	Alert,
-	AlertAction,
-	AlertDescription,
-	AlertTitle,
-} from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -32,22 +26,22 @@ export function VerifyEmailBanner() {
 
 	return (
 		<>
-			<Alert className='rounded-none border-x-0 border-t-0'>
-				<MailWarning />
-				<AlertTitle>Verify your email</AlertTitle>
-				<AlertDescription>
+			<div className='bg-card text-card-foreground flex w-full flex-col items-center gap-2 border-b px-8 py-4'>
+				<div className='flex items-center gap-2'>
+					<MailWarning className='size-5' />
+					<p className='font-medium'>Verify your email</p>
+				</div>
+				<p className='text-muted-foreground text-sm'>
 					Confirm your email address to unlock check-ins.
-				</AlertDescription>
-				<AlertAction>
-					<Button
-						size='sm'
-						onClick={pm.handleSendCode}
-						disabled={pm.isSending}
-					>
-						Send code
-					</Button>
-				</AlertAction>
-			</Alert>
+				</p>
+				<Button
+					size='sm'
+					onClick={pm.handleSendCode}
+					disabled={pm.isSending}
+				>
+					Send code
+				</Button>
+			</div>
 
 			<Dialog open={pm.open} onOpenChange={pm.setOpen}>
 				<DialogContent className='sm:max-w-sm'>
