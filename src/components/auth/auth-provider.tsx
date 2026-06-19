@@ -57,8 +57,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 		}
 	}
 
+	// Refetch the profile to pick up server-side changes (e.g. is_verified
+	// flips to true after the user verifies their email).
+	async function reloadUser() {
+		const profile = await getProfile()
+		setUser(profile)
+	}
+
 	return (
-		<AuthContext.Provider value={{ status, user, signIn, signOut }}>
+		<AuthContext.Provider
+			value={{ status, user, signIn, signOut, reloadUser }}
+		>
 			{children}
 		</AuthContext.Provider>
 	)
