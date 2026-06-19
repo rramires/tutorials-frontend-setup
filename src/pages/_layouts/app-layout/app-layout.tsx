@@ -1,6 +1,7 @@
 import { GlobeCheck, LogOut } from 'lucide-react'
 import { Outlet } from 'react-router'
 
+import { VerifyEmailBanner } from '@/components/auth/verify-email-banner/verify-email-banner'
 import { ModeToggle } from '@/components/theme/mode-toggle'
 import { Button } from '@/components/ui/button'
 
@@ -31,6 +32,7 @@ export function AppLayout() {
 					<ModeToggle />
 				</div>
 			</header>
+			<VerifyEmailBanner />
 			<main className='flex flex-1'>
 				<Outlet />
 			</main>
