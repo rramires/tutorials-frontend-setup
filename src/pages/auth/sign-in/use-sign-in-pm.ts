@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { signIn } from '@/api/sign-in'
+import { useAuth } from '@/components/auth/auth-hooks'
 
 const signInForm = z.object({
 	identifier: z.string().min(1, 'Enter your email or username.'),
@@ -20,6 +21,7 @@ type SignInForm = z.infer<typeof signInForm>
 
 export function useSignInPM() {
 	const navigate = useNavigate()
+	const auth = useAuth()
 
 	const {
 		register,
@@ -35,7 +37,8 @@ export function useSignInPM() {
 
 	async function onSubmit(data: SignInForm) {
 		try {
-			await authenticate(data)
+			const { token } = await authenticate(data)
+			await auth.signIn(token)
 			toast.success('Signed in successfully.')
 			navigate('/')
 		} catch (err) {

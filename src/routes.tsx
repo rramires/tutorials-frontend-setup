@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 
+import { ProtectedRoute } from './components/auth/protected-route'
 import { AppLayout } from './pages/_layouts/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
@@ -16,8 +17,13 @@ export const router = createBrowserRouter([
 		children: [
 			{
 				path: '/',
-				element: <AppLayout />,
-				children: [{ index: true, element: <Home /> }],
+				element: <ProtectedRoute />,
+				children: [
+					{
+						element: <AppLayout />,
+						children: [{ index: true, element: <Home /> }],
+					},
+				],
 			},
 			{
 				path: '/sign-in',
