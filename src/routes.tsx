@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 
 import { ProtectedRoute } from './components/auth/protected-route'
-import { AppLayout } from './pages/_layouts/app-layout'
+import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
 import { Home } from './pages/app/home'
