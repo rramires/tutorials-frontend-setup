@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { env } from '@/env'
+import { getToken } from '@/lib/auth-store'
 
 export const api = axios.create({
 	baseURL: env.VITE_API_URL,
@@ -16,3 +17,14 @@ if (env.VITE_ENABLE_API_DELAY) {
 		return config
 	})
 }
+
+// Attach the in-memory access token to every request.
+api.interceptors.request.use((config) => {
+	const token = getToken()
+
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`
+	}
+
+	return config
+})
