@@ -5,6 +5,7 @@ import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
 import { Home } from './pages/app/home'
+import { ForgotPassword } from './pages/auth/forgot-password/forgot-password'
 import { SignIn } from './pages/auth/sign-in/sign-in'
 import { NotFound } from './pages/e404'
 import { ErrorPage } from './pages/error'
@@ -34,6 +35,11 @@ export const router = createBrowserRouter([
 				path: '/register',
 				element: <RegisterLayout />,
 				children: [{ index: true, element: <Register /> }],
+			},
+			{
+				path: '/forgot-password',
+				element: <AuthLayout />,
+				children: [{ index: true, element: <ForgotPassword /> }],
 			},
 		],
 	},
