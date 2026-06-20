@@ -1,11 +1,13 @@
 import { createBrowserRouter } from 'react-router'
 
 import { ProtectedRoute } from './components/auth/protected-route'
+import { RoleRoute } from './components/auth/role-route'
 import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
 import { Gyms } from './pages/app/gyms/gyms'
 import { Home } from './pages/app/home'
+import { NewGym } from './pages/app/new-gym/new-gym'
 import { ForgotPassword } from './pages/auth/forgot-password/forgot-password'
 import { ResetPassword } from './pages/auth/reset-password/reset-password'
 import { SignIn } from './pages/auth/sign-in/sign-in'
@@ -28,6 +30,15 @@ export const router = createBrowserRouter([
 						children: [
 							{ index: true, element: <Home /> },
 							{ path: 'gyms', element: <Gyms /> },
+							{
+								element: <RoleRoute allow={['ADMIN']} />,
+								children: [
+									{
+										path: 'gyms/new',
+										element: <NewGym />,
+									},
+								],
+							},
 						],
 					},
 				],
