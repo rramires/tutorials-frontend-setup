@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/auth/protected-route'
 import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
+import { Gyms } from './pages/app/gyms/gyms'
 import { Home } from './pages/app/home'
 import { ForgotPassword } from './pages/auth/forgot-password/forgot-password'
 import { ResetPassword } from './pages/auth/reset-password/reset-password'
@@ -24,7 +25,10 @@ export const router = createBrowserRouter([
 				children: [
 					{
 						element: <AppLayout />,
-						children: [{ index: true, element: <Home /> }],
+						children: [
+							{ index: true, element: <Home /> },
+							{ path: 'gyms', element: <Gyms /> },
+						],
 					},
 				],
 			},
