@@ -2,11 +2,14 @@ import { setupWorker } from 'msw/browser'
 
 import { env } from '@/env'
 
+import { createGymMock } from './create-gym-mock'
 import { forgotPasswordMock } from './forgot-password-mock'
+import { nearbyGymsMock } from './nearby-gyms-mock'
 import { profileMock } from './profile-mock'
 import { refreshMock } from './refresh-mock'
 import { registerMock } from './register-mock'
 import { resetPasswordMock } from './reset-password-mock'
+import { searchGymsMock } from './search-gyms-mock'
 import { sendVerificationMock } from './send-verification-mock'
 import { signInMock } from './sign-in-mock'
 import { signOutMock } from './sign-out-mock'
@@ -26,6 +29,9 @@ export const worker = setupWorker(
 	sendVerificationMock,
 	verifyEmailByLinkMock,
 	verifyEmailByOtpMock,
+	createGymMock,
+	nearbyGymsMock,
+	searchGymsMock,
 )
 
 export async function enableMSW() {
