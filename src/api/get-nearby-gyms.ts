@@ -1,7 +1,7 @@
 import { api } from '@/lib/api'
 import type { Coordinates } from '@/lib/geolocation'
 
-import type { Gym } from './search-gyms'
+import { type Gym, normalizeGym } from './search-gyms'
 
 interface NearbyGymsResponse {
 	gyms: Gym[]
@@ -12,5 +12,5 @@ export async function getNearbyGyms({ latitude, longitude }: Coordinates) {
 		params: { latitude, longitude },
 	})
 
-	return response.data.gyms
+	return response.data.gyms.map(normalizeGym)
 }

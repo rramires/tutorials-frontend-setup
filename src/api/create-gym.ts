@@ -1,6 +1,6 @@
 import { api } from '@/lib/api'
 
-import type { Gym } from './search-gyms'
+import { type Gym, normalizeGym } from './search-gyms'
 
 export interface CreateGymBody {
 	title: string
@@ -17,5 +17,5 @@ interface CreateGymResponse {
 export async function createGym(body: CreateGymBody) {
 	const response = await api.post<CreateGymResponse>('/gyms', body)
 
-	return response.data.gym
+	return normalizeGym(response.data.gym)
 }

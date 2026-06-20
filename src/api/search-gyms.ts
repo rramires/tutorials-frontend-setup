@@ -9,6 +9,16 @@ export interface Gym {
 	longitude: number
 }
 
+// The API serializes latitude/longitude as strings (Prisma Decimal). Coerce
+// them to numbers so the rest of the app can treat coordinates as numbers.
+export function normalizeGym(gym: Gym): Gym {
+	return {
+		...gym,
+		latitude: Number(gym.latitude),
+		longitude: Number(gym.longitude),
+	}
+}
+
 interface SearchGymsResponse {
 	gyms: Gym[]
 }
@@ -23,5 +33,5 @@ export async function searchGyms({ query, page = 1 }: SearchGymsParams) {
 		params: { query, page },
 	})
 
-	return response.data.gyms
+	return response.data.gyms.map(normalizeGym)
 }
