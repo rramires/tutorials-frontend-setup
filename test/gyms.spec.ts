@@ -54,7 +54,9 @@ test('admin creates a gym from the New gym page', async ({ page }) => {
 
 	await expect(page.getByText('Gym "Night Owl Gym" created.')).toBeVisible()
 	await expect(page).toHaveURL('/gyms')
-	await expect(page.getByText('Night Owl Gym')).toBeVisible()
+	// Exact match: the success toast also contains "Night Owl Gym", so a
+	// substring match would resolve to two elements (strict-mode violation).
+	await expect(page.getByText('Night Owl Gym', { exact: true })).toBeVisible()
 
 	await waitForUIInspection(page)
 })
