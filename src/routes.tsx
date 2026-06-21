@@ -6,6 +6,8 @@ import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
 import { Account } from './pages/app/account/account'
+import { UserEdit } from './pages/app/admin/users/user-edit/user-edit'
+import { AdminUsers } from './pages/app/admin/users/users'
 import { CheckIns } from './pages/app/check-ins/check-ins'
 import { Gyms } from './pages/app/gyms/gyms'
 import { Home } from './pages/app/home/home'
@@ -38,9 +40,14 @@ export const router = createBrowserRouter([
 							{
 								element: <RoleRoute allow={['ADMIN']} />,
 								children: [
+									{ path: 'gyms/new', element: <NewGym /> },
 									{
-										path: 'gyms/new',
-										element: <NewGym />,
+										path: 'admin/users',
+										element: <AdminUsers />,
+									},
+									{
+										path: 'admin/users/:userId',
+										element: <UserEdit />,
 									},
 								],
 							},

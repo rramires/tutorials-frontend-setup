@@ -1,4 +1,11 @@
-import { Dumbbell, History, LayoutDashboard, UserCog } from 'lucide-react'
+import {
+	Dumbbell,
+	History,
+	LayoutDashboard,
+	Plus,
+	UserCog,
+	Users,
+} from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useAuth } from '@/components/auth/auth-hooks'
@@ -16,6 +23,16 @@ export function useAppSidebarPM() {
 		{ to: '/account', label: 'Account', icon: UserCog },
 	]
 
+	// Admin nav: a separate, labelled group, only built for admins. The routes
+	// are still guarded (defense in depth) — hiding the links is just UX.
+	const adminItems =
+		user?.role === 'ADMIN'
+			? [
+					{ to: '/gyms/new', label: 'New gym', icon: Plus },
+					{ to: '/admin/users', label: 'Users', icon: Users },
+				]
+			: []
+
 	async function handleSignOut() {
 		await signOut()
 		navigate('/sign-in')
@@ -24,6 +41,7 @@ export function useAppSidebarPM() {
 	return {
 		user,
 		items,
+		adminItems,
 		pathname: location.pathname,
 		handleSignOut,
 	}

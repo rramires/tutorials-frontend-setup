@@ -9,6 +9,7 @@ import {
 	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
+	SidebarGroupLabel,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
@@ -53,6 +54,29 @@ export function AppSidebar() {
 						</SidebarMenu>
 					</SidebarGroupContent>
 				</SidebarGroup>
+				{pm.adminItems.length > 0 && (
+					<SidebarGroup>
+						<SidebarGroupLabel>Admin</SidebarGroupLabel>
+						<SidebarGroupContent>
+							<SidebarMenu>
+								{pm.adminItems.map((item) => (
+									<SidebarMenuItem key={item.to}>
+										<SidebarMenuButton
+											asChild
+											isActive={pm.pathname === item.to}
+											tooltip={item.label}
+										>
+											<Link to={item.to}>
+												<item.icon />
+												<span>{item.label}</span>
+											</Link>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								))}
+							</SidebarMenu>
+						</SidebarGroupContent>
+					</SidebarGroup>
+				)}
 			</SidebarContent>
 
 			<SidebarFooter>

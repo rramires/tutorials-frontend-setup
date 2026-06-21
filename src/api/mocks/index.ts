@@ -11,6 +11,8 @@ import {
 } from './confirm-email-change-mock'
 import { createGymMock } from './create-gym-mock'
 import { forgotPasswordMock } from './forgot-password-mock'
+import { getUserMock } from './get-user-mock'
+import { getUsersMock } from './get-users-mock'
 import { nearbyGymsMock } from './nearby-gyms-mock'
 import { profileMock } from './profile-mock'
 import { refreshMock } from './refresh-mock'
@@ -22,6 +24,7 @@ import { sendVerificationMock } from './send-verification-mock'
 import { signInMock } from './sign-in-mock'
 import { signOutMock } from './sign-out-mock'
 import { updateProfileMock } from './update-profile-mock'
+import { updateUserMock } from './update-user-mock'
 import { validateCheckInMock } from './validate-check-in-mock'
 import {
 	verifyEmailByLinkMock,
@@ -50,6 +53,9 @@ export const worker = setupWorker(
 	confirmEmailChangeByOtpMock,
 	requestEmailChangeMock,
 	updateProfileMock,
+	getUsersMock,
+	getUserMock,
+	updateUserMock,
 )
 
 export async function enableMSW() {
