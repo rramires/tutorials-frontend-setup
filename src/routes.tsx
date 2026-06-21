@@ -5,10 +5,12 @@ import { RoleRoute } from './components/auth/role-route'
 import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
+import { Account } from './pages/app/account/account'
 import { CheckIns } from './pages/app/check-ins/check-ins'
 import { Gyms } from './pages/app/gyms/gyms'
 import { Home } from './pages/app/home/home'
 import { NewGym } from './pages/app/new-gym/new-gym'
+import { ConfirmEmailChange } from './pages/auth/confirm-email-change/confirm-email-change'
 import { ForgotPassword } from './pages/auth/forgot-password/forgot-password'
 import { ResetPassword } from './pages/auth/reset-password/reset-password'
 import { SignIn } from './pages/auth/sign-in/sign-in'
@@ -32,6 +34,7 @@ export const router = createBrowserRouter([
 							{ index: true, element: <Home /> },
 							{ path: 'gyms', element: <Gyms /> },
 							{ path: 'check-ins', element: <CheckIns /> },
+							{ path: 'account', element: <Account /> },
 							{
 								element: <RoleRoute allow={['ADMIN']} />,
 								children: [
@@ -69,6 +72,11 @@ export const router = createBrowserRouter([
 				path: '/users/verify-email',
 				element: <AuthLayout />,
 				children: [{ index: true, element: <VerifyEmail /> }],
+			},
+			{
+				path: '/users/confirm-email-change',
+				element: <AuthLayout />,
+				children: [{ index: true, element: <ConfirmEmailChange /> }],
 			},
 		],
 	},

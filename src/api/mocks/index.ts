@@ -5,17 +5,23 @@ import { env } from '@/env'
 import { checkInMock } from './check-in-mock'
 import { checkInsHistoryMock } from './check-ins-history-mock'
 import { checkInsMetricsMock } from './check-ins-metrics-mock'
+import {
+	confirmEmailChangeByLinkMock,
+	confirmEmailChangeByOtpMock,
+} from './confirm-email-change-mock'
 import { createGymMock } from './create-gym-mock'
 import { forgotPasswordMock } from './forgot-password-mock'
 import { nearbyGymsMock } from './nearby-gyms-mock'
 import { profileMock } from './profile-mock'
 import { refreshMock } from './refresh-mock'
 import { registerMock } from './register-mock'
+import { requestEmailChangeMock } from './request-email-change-mock'
 import { resetPasswordMock } from './reset-password-mock'
 import { searchGymsMock } from './search-gyms-mock'
 import { sendVerificationMock } from './send-verification-mock'
 import { signInMock } from './sign-in-mock'
 import { signOutMock } from './sign-out-mock'
+import { updateProfileMock } from './update-profile-mock'
 import { validateCheckInMock } from './validate-check-in-mock'
 import {
 	verifyEmailByLinkMock,
@@ -40,6 +46,10 @@ export const worker = setupWorker(
 	checkInsHistoryMock,
 	checkInsMetricsMock,
 	validateCheckInMock,
+	confirmEmailChangeByLinkMock,
+	confirmEmailChangeByOtpMock,
+	requestEmailChangeMock,
+	updateProfileMock,
 )
 
 export async function enableMSW() {

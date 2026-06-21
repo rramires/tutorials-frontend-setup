@@ -53,17 +53,23 @@ export function CheckIns() {
 								<div className='flex items-center gap-3'>
 									<Badge
 										variant={
-											item.validated ? 'default' : 'outline'
+											item.validated
+												? 'default'
+												: 'outline'
 										}
 									>
-										{item.validated ? 'Validated' : 'Pending'}
+										{item.validated
+											? 'Validated'
+											: 'Pending'}
 									</Badge>
 
 									{pm.isAdmin && !item.validated && (
 										<Button
 											size='sm'
 											variant='outline'
-											disabled={pm.validatingId === item.id}
+											disabled={
+												pm.validatingId === item.id
+											}
 											onClick={() =>
 												pm.validateCheckIn(item.id)
 											}
