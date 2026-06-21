@@ -5,6 +5,7 @@ import { RoleRoute } from './components/auth/role-route'
 import { AppLayout } from './pages/_layouts/app-layout/app-layout'
 import { AuthLayout } from './pages/_layouts/auth-layout'
 import { RegisterLayout } from './pages/_layouts/register-layout'
+import { CheckIns } from './pages/app/check-ins/check-ins'
 import { Gyms } from './pages/app/gyms/gyms'
 import { Home } from './pages/app/home'
 import { NewGym } from './pages/app/new-gym/new-gym'
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
 						children: [
 							{ index: true, element: <Home /> },
 							{ path: 'gyms', element: <Gyms /> },
+							{ path: 'check-ins', element: <CheckIns /> },
 							{
 								element: <RoleRoute allow={['ADMIN']} />,
 								children: [
