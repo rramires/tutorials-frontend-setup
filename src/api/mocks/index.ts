@@ -23,6 +23,7 @@ import { searchGymsMock } from './search-gyms-mock'
 import { sendVerificationMock } from './send-verification-mock'
 import { signInMock } from './sign-in-mock'
 import { signOutMock } from './sign-out-mock'
+import { updateGymMock } from './update-gym-mock'
 import { updateProfileMock } from './update-profile-mock'
 import { updateUserMock } from './update-user-mock'
 import { validateCheckInMock } from './validate-check-in-mock'
@@ -56,6 +57,7 @@ export const worker = setupWorker(
 	getUsersMock,
 	getUserMock,
 	updateUserMock,
+	updateGymMock,
 )
 
 export async function enableMSW() {
