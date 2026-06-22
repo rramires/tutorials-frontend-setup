@@ -32,6 +32,10 @@ test('admin lists users and promotes a member', async ({ page }) => {
 		.click()
 	await expect(page).toHaveURL(/\/admin\/users\/.+/)
 
+	// The role select must show the seeded value on load (before any click) —
+	// this is the case that broke on a real browser but not in happy-dom.
+	await expect(page.getByRole('combobox')).toContainText('Member')
+
 	// Promote MEMBER → ADMIN via the role select.
 	await page.getByRole('combobox').click()
 	await page.getByRole('option', { name: 'Admin' }).click()

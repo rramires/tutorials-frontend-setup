@@ -2,6 +2,7 @@ import { Controller } from 'react-hook-form'
 import { Link } from 'react-router'
 
 import { PageTitle } from '@/components/title/page-title'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
 	Card,
@@ -104,31 +105,54 @@ export function UserEdit() {
 
 										<div className='grid gap-2'>
 											<Label htmlFor='role'>Role</Label>
-											<Controller
-												control={pm.control}
-												name='role'
-												render={({ field }) => (
-													<Select
-														value={field.value}
-														onValueChange={
-															field.onChange
-														}
-														disabled={pm.isSelf}
-													>
-														<SelectTrigger id='role'>
-															<SelectValue />
-														</SelectTrigger>
-														<SelectContent>
-															<SelectItem value='MEMBER'>
-																Member
-															</SelectItem>
-															<SelectItem value='ADMIN'>
-																Admin
-															</SelectItem>
-														</SelectContent>
-													</Select>
-												)}
-											/>
+											{pm.isSelf ? (
+												// Your own role can't change — show
+												// it read-only as a badge.
+												<Badge
+													variant={
+														pm.user.role === 'ADMIN'
+															? 'default'
+															: 'secondary'
+													}
+													className='w-fit'
+												>
+													{pm.user.role === 'ADMIN'
+														? 'Admin'
+														: 'Member'}
+												</Badge>
+											) : (
+												<Controller
+													control={pm.control}
+													name='role'
+													render={({ field }) => (
+														<Select
+															// key remounts the Select per user; defaultValue seeds it
+															// uncontrolled. A controlled value goes stale during the
+															// cross-user navigation transient (useForm persists) and
+															// Radix won't re-show it without reopening.
+															/* key={pm.user?.id} */
+															defaultValue={
+																field.value
+															}
+															onValueChange={
+																field.onChange
+															}
+														>
+															<SelectTrigger id='role'>
+																<SelectValue />
+															</SelectTrigger>
+															<SelectContent>
+																<SelectItem value='MEMBER'>
+																	Member
+																</SelectItem>
+																<SelectItem value='ADMIN'>
+																	Admin
+																</SelectItem>
+															</SelectContent>
+														</Select>
+													)}
+												/>
+											)}
 											{pm.isSelf && (
 												<p className='text-muted-foreground text-sm'>
 													You can't change your own

@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 import { useEffect } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -47,9 +47,8 @@ export function useUserEditPM() {
 		register,
 		control,
 		handleSubmit,
-		reset,
 		setValue,
-		formState: { errors },
+		formState: { errors, dirtyFields },
 	} = useForm<EditForm>({
 		resolver: zodResolver(editForm),
 		defaultValues: {
@@ -58,25 +57,25 @@ export function useUserEditPM() {
 			role: 'MEMBER',
 			is_verified: false,
 		},
+		// `values` (not a post-mount reset) re-seeds the form when the async user
+		// load resolves. It refreshes the Controller-bound Select/Switch too — a
+		// reset() inside an effect leaves those stale (register inputs seed, the
+		// Controllers don't), so on first open Role/verified came up blank.
+		values: user
+			? {
+					username: user.username,
+					email: user.email,
+					role: user.role,
+					is_verified: user.is_verified,
+				}
+			: undefined,
 	})
 
-	// Seed the form once the user loads.
-	useEffect(() => {
-		if (user) {
-			reset({
-				username: user.username,
-				email: user.email,
-				role: user.role,
-				is_verified: user.is_verified,
-			})
-		}
-	}, [user, reset])
-
 	// Rule: changing the email unverifies the account, so the verified toggle is
-	// forced off (and disabled in the view) while the email differs. useWatch is
-	// the subscription hook (safe to memoize), unlike the watch() function.
-	const watchedEmail = useWatch({ control, name: 'email' })
-	const emailChanged = user ? watchedEmail !== user.email : false
+	// forced off (and disabled in the view) while the email differs. dirtyFields
+	// (not a watched value) tells us the email diverged from the seeded baseline
+	// — no first-render lag that would wrongly clobber the seeded verified flag.
+	const emailChanged = Boolean(dirtyFields.email)
 	useEffect(() => {
 		if (emailChanged) {
 			setValue('is_verified', false)

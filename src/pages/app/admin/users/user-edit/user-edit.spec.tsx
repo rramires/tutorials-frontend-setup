@@ -55,19 +55,25 @@ function renderEdit({
 }
 
 describe('UserEdit page', () => {
-	it('disables the role select when editing your own account', async () => {
+	it('shows the role read-only (no select) when editing your own account', async () => {
 		renderEdit({ selfId: 'me', targetId: 'me' })
 
 		expect(
 			await screen.findByText("You can't change your own role."),
 		).toBeInTheDocument()
-		expect(screen.getByRole('combobox')).toBeDisabled()
+		// Self-edit renders the role as a static badge, not an editable select.
+		expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
 	})
 
-	it('allows changing the role of another user', async () => {
+	it('seeds the form and allows changing the role of another user', async () => {
 		renderEdit({ selfId: 'admin-id', targetId: 'other-id' })
 
 		expect(await screen.findByLabelText('Username')).toHaveValue('memberx')
+		// Controller-bound fields must seed from the loaded user on first open.
+		// Regression: role/verified came up blank, so the role failed validation
+		// and Save silently did nothing.
+		expect(screen.getByRole('combobox')).toHaveTextContent('Member')
+		expect(screen.getByRole('switch')).toBeChecked()
 		expect(
 			screen.queryByText("You can't change your own role."),
 		).not.toBeInTheDocument()
