@@ -1,4 +1,4 @@
-import { GlobeCheck, LogOut } from 'lucide-react'
+import { GlobeCheck, LogOut, UserRoundPen } from 'lucide-react'
 import { Link } from 'react-router'
 
 import { Badge } from '@/components/ui/badge'
@@ -81,8 +81,8 @@ export function AppSidebar() {
 
 			<SidebarFooter>
 				<div className='flex flex-col gap-2 px-2 py-1 group-data-[collapsible=icon]:hidden'>
-					<div className='flex items-center justify-between gap-2'>
-						<span className='truncate text-sm font-medium'>
+					<div className='flex items-center gap-2'>
+						<span className='flex-1 truncate text-sm font-medium'>
 							{pm.user?.username}
 						</span>
 						<Badge
@@ -94,6 +94,22 @@ export function AppSidebar() {
 						>
 							{pm.user?.role === 'ADMIN' ? 'Admin' : 'Member'}
 						</Badge>
+						{/* Account is self-service — it lives here, next to your
+						    identity, not in the gym-domain nav above. */}
+						<Button
+							asChild
+							variant={
+								pm.pathname === '/account'
+									? 'secondary'
+									: 'ghost'
+							}
+							size='icon'
+							className='size-7'
+						>
+							<Link to='/account' aria-label='Account' title='Account'>
+								<UserRoundPen />
+							</Link>
+						</Button>
 					</div>
 					<Button
 						variant='outline'

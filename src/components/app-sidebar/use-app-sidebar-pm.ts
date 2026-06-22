@@ -1,11 +1,4 @@
-import {
-	Dumbbell,
-	History,
-	LayoutDashboard,
-	Plus,
-	UserCog,
-	Users,
-} from 'lucide-react'
+import { Dumbbell, History, LayoutDashboard, Plus, Users } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useAuth } from '@/components/auth/auth-hooks'
@@ -15,12 +8,12 @@ export function useAppSidebarPM() {
 	const navigate = useNavigate()
 	const location = useLocation()
 
-	// Main nav: available to everyone (Account included — it acts on yourself).
+	// Main nav: the gym-domain features. Account is self-service (about you), so
+	// it lives in the footer next to your identity — not here.
 	const items = [
 		{ to: '/', label: 'Dashboard', icon: LayoutDashboard },
 		{ to: '/gyms', label: 'Gyms', icon: Dumbbell },
 		{ to: '/check-ins', label: 'Check-ins', icon: History },
-		{ to: '/account', label: 'Account', icon: UserCog },
 	]
 
 	// Admin nav: a separate, labelled group, only built for admins. The routes
