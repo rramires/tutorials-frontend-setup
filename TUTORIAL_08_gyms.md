@@ -1707,7 +1707,7 @@ Temos academias e a primeira tela restrita por papel. As próximas partes:
     **Commit da documentação.** Por fim, versione este arquivo sozinho:
 
 ```sh
-git add README_8_gyms.md
+git add TUTORIAL_08_gyms.md
 git commit -m "docs: add part 8 tutorial (gyms + sidebar)"
 ```
 

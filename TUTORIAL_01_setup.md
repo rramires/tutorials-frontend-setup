@@ -59,7 +59,7 @@ pnpm dev
 
 ```sh
 // remover da raiz (desse projeto)
-README.md
+TUTORIAL_01_setup.md
 // remover
 public/favicon.svg
 public/icons.svg

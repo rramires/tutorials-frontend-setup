@@ -1,6 +1,6 @@
 # Tutorial Frontend Setup — Parte 7: verificação de email e reset de senha
 
-Continuação da Parte 6 (**README_6_backend.md**). Pré-requisito: o app conectado ao backend real — sessão autenticada (token em memória + refresh por cookie), rotas protegidas, layouts com header `Gympass Sample App`, e o MSW estendido mantendo unit/e2e verdes offline.
+Continuação da Parte 6 (**TUTORIAL_06_backend.md**). Pré-requisito: o app conectado ao backend real — sessão autenticada (token em memória + refresh por cookie), rotas protegidas, layouts com header `Gympass Sample App`, e o MSW estendido mantendo unit/e2e verdes offline.
 
 A Parte 6 fechou o ciclo de **sessão**. Esta abre o ciclo de **conta**: confirmar que o email é seu (**verificação**) e recuperar acesso quando a senha se perde (**reset**). São os dois fluxos de "auto-atendimento" que toda app real tem — e que destravam o que vem depois (o check-in, na Parte 9, exige email verificado).
 
@@ -1622,7 +1622,7 @@ A conta agora se auto-atende. O usuário confirma o email (por **código** ou po
 Por fim, comite este tutorial:
 
 ```sh
-git add README_7_email_password.md
+git add TUTORIAL_07_email_password.md
 git commit -m "docs: add part 7 tutorial (email verification + password reset)"
 git push
 ```

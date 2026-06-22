@@ -1,6 +1,6 @@
 # Tutorial Frontend Setup — Parte 5: testes end-to-end com Playwright
 
-Continuação da Parte 4 (**README_4_vitest.md**). Pré-requisito: o projeto até o final da Parte 4 — formulários **sign-in** e **register** conectados (`useMutation` + toast + navigate), o **MSW** mockando a API e os **testes unitários** com Vitest.
+Continuação da Parte 4 (**TUTORIAL_04_vitest.md**). Pré-requisito: o projeto até o final da Parte 4 — formulários **sign-in** e **register** conectados (`useMutation` + toast + navigate), o **MSW** mockando a API e os **testes unitários** com Vitest.
 
 Na Parte 4 testamos a UI **isolada** (a validação do Zod, sem rede). Agora subimos um nível: testes **end-to-end** com **Playwright**, num navegador real, exercitando o **caminho completo** — preencher o form → request → toast → navegação — **contra o MSW**.
 
@@ -396,7 +396,7 @@ Pronto. O app agora tem **duas camadas de teste** sobre os mocks: unit (Parte 4,
 Por fim, comite este tutorial:
 
 ```sh
-git add README_5_playwright.md
+git add TUTORIAL_05_playwright.md
 git commit -m "docs: add part 5 tutorial (e2e tests with playwright)"
 git push
 ```

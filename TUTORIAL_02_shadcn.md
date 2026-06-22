@@ -1,6 +1,6 @@
 # Tutorial Frontend Setup — Parte 2: shadcn/ui
 
-Continuação da Parte 1 (**README.md**). Pré-requisito: o projeto já configurado até o final da Parte 1 — Vite, ESLint + Prettier, organização de imports, path alias, React Router DOM, títulos, Tailwind CSS v4, Lucide React e os componentes de exemplo em **components/ui-sample**.
+Continuação da Parte 1 (**TUTORIAL_01_setup.md**). Pré-requisito: o projeto já configurado até o final da Parte 1 — Vite, ESLint + Prettier, organização de imports, path alias, React Router DOM, títulos, Tailwind CSS v4, Lucide React e os componentes de exemplo em **components/ui-sample**.
 
 Nesta parte vamos adicionar:
 

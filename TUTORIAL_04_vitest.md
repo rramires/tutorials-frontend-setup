@@ -1,6 +1,6 @@
 # Tutorial Frontend Setup — Parte 4: testes unitários com Vitest
 
-Continuação da Parte 3 (**README_3_msw.md**). Pré-requisito: o projeto até o final da Parte 3 — camada de API (axios), React Query, sonner, os formulários **sign-in** e **register** conectados (`useMutation` + toast + navigate) e o **MSW** mockando a API.
+Continuação da Parte 3 (**TUTORIAL_03_msw.md**). Pré-requisito: o projeto até o final da Parte 3 — camada de API (axios), React Query, sonner, os formulários **sign-in** e **register** conectados (`useMutation` + toast + navigate) e o **MSW** mockando a API.
 
 Agora que o app funciona com os mocks, vamos blindar os comportamentos com **testes automatizados**. Esta parte cobre os **testes unitários/de componente** com **Vitest** + **Testing Library** (DOM virtual via **happy-dom**). Os testes **end-to-end** (navegador real, Playwright) ficam pra **Parte 5**.
 
@@ -493,4 +493,4 @@ Nesta parte você:
 
 Os testes garantem que a **lógica da UI** não regride. O que falta é validar o **fluxo completo no navegador** (preencher → submeter → toast → navegar) ponta a ponta.
 
-**Próxima parte (Parte 5 — `README_5_playwright.md`):** testes **end-to-end com Playwright**, rodando o app de verdade contra o **MSW** (via `pnpm dev:test` na porta 5001), simulando o usuário do começo ao fim.
+**Próxima parte (Parte 5 — `TUTORIAL_05_playwright.md`):** testes **end-to-end com Playwright**, rodando o app de verdade contra o **MSW** (via `pnpm dev:test` na porta 5001), simulando o usuário do começo ao fim.

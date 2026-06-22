@@ -11,7 +11,7 @@ próxima parte.
 ## Resume prompt (cola numa sessão nova, se for continuar/derivar)
 
 > Tutorial frontend (`01_setup`, branch `master`) está **COMPLETO** — Partes 1–10 todas escritas,
-> executadas e commitadas: **README.md** (Tailwind) → **README_2_shadcn** → **README_3_msw**
+> executadas e commitadas: **TUTORIAL_01_setup.md** (Tailwind) → **README_2_shadcn** → **README_3_msw**
 > (mock-first MSW) → **README_4_vitest** → **README_5_playwright** → **README_6_backend** (auth
 > real) → **README_7_email_password** (verif-email + reset, 2 portas) → **README_8_gyms** (sidebar
 > + `RoleRoute`) → **README_9_check_ins** (dashboard recharts + ⭐ gate de email) →

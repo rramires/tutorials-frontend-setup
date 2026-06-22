@@ -1520,6 +1520,6 @@ métricas, e o admin validando. Falta a última parte:
 **Commit da documentação.** Por fim, versione este arquivo sozinho:
 
 ```sh
-git add README_9_check_ins.md
+git add TUTORIAL_09_check_ins.md
 git commit -m "docs: add part 9 tutorial (check-ins + dashboard)"
 ```

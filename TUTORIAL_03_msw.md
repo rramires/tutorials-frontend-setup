@@ -1,6 +1,6 @@
 # Tutorial Frontend Setup — Parte 3: API mockada com MSW
 
-Continuação da Parte 2 (**README_2_shadcn.md**). Pré-requisito: o projeto até o final da Parte 2 — shadcn/ui, tema claro/escuro, layouts em tokens e os formulários **sign-in** e **register** com React Hook Form + Zod no padrão Presentation Model (hoje só fazem `console.log`).
+Continuação da Parte 2 (**TUTORIAL_02_shadcn.md**). Pré-requisito: o projeto até o final da Parte 2 — shadcn/ui, tema claro/escuro, layouts em tokens e os formulários **sign-in** e **register** com React Hook Form + Zod no padrão Presentation Model (hoje só fazem `console.log`).
 
 Nesta parte vamos deixar o app **funcional sem backend**, no estilo **mock-first**: o cliente clica e usa as telas de verdade, e a gente valida o fluxo antes de existir uma API real.
 

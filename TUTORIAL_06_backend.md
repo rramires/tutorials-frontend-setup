@@ -1,6 +1,6 @@
 # Tutorial Frontend Setup — Parte 6: integração com o backend real
 
-Continuação da Parte 5 (**README_5_playwright.md**). Pré-requisito: o projeto até o final da Parte 5 — formulários **sign-in** e **register** conectados, o **MSW** mockando a API, testes **unitários** (Vitest) e **e2e** (Playwright). Até aqui tudo rodou contra o mock. Agora trocamos por um **backend de verdade**.
+Continuação da Parte 5 (**TUTORIAL_05_playwright.md**). Pré-requisito: o projeto até o final da Parte 5 — formulários **sign-in** e **register** conectados, o **MSW** mockando a API, testes **unitários** (Vitest) e **e2e** (Playwright). Até aqui tudo rodou contra o mock. Agora trocamos por um **backend de verdade**.
 
 Nas partes anteriores o login "funcionava", mas o token devolvido era **jogado fora** — nenhuma rota era protegida, nenhuma request ia autenticada. Esta parte fecha o ciclo: guardar o token, mandá-lo em toda request, **renovar sozinho** quando expira e **proteger** as rotas que exigem sessão.
 
@@ -897,7 +897,7 @@ Fim da série. O app saiu de telas estáticas (P1–P2), virou clicável sobre m
 Por fim, comite este tutorial:
 
 ```sh
-git add README_6_backend.md
+git add TUTORIAL_06_backend.md
 git commit -m "docs: add part 6 tutorial (real backend integration)"
 git push
 ```

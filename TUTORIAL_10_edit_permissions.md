@@ -2877,6 +2877,6 @@ O que ficou de método, e vale levar para qualquer projeto derivado:
 **Commit da documentação.** Por fim, versione este arquivo sozinho:
 
 ```sh
-git add README_10_edit_permissions.md
+git add TUTORIAL_10_edit_permissions.md
 git commit -m "docs: add part 10 tutorial (edit + permissions)"
 ```
