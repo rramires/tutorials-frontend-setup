@@ -11,12 +11,11 @@ Vitest) → `README_5_playwright.md` (e2e tests with Playwright, against MSW) �
 each) → `README_8_gyms.md` (gyms search/nearby + create-gym ADMIN; the **sidebar** and the
 **role guard** `RoleRoute`/`Forbidden` were born here) → `README_9_check_ins.md` (check-ins: check
 in from the gym card, `/check-ins` history with ADMIN **Validate**, the empty Home became a
-**dashboard** with a recharts activity chart, and the **email-gate demo** in the smoke). **Parts
-1–9 done, committed, pushed** (HEAD `ef302ba`). Next and **last: Part 10** — edit + permissions
-(account self-service incl. **email change** `POST /auth/me/email` + confirm, and the **admin area**
-`GET/PATCH /users`, `PATCH /gyms/:id`, all behind `RoleRoute`). The P9 smoke forced two backend
-fixes now in `master`: check-in domain errors return **4xx** (not 500), and **CORS `methods`** now
-allows PATCH/PUT/DELETE (Part 10 depends on this). See HANDOFF.md resume prompt + the
-`project_next_mission` memory. The user executes it manually, step by step; plan each layout with
-the user before writing.
+**dashboard** with a recharts activity chart, and the **email-gate demo** in the smoke) →
+`README_10_edit_permissions.md` (account self-service incl. **email change**, and the **admin
+area** `GET/PATCH /users` + `PATCH /gyms/:id` behind `RoleRoute`; Account lives as an icon button
+in the **sidebar footer**). **✅ Tutorial COMPLETE — all 10 parts done & committed** (HEAD
+`b01e354`). **There is no Part 11.** Anything further is an enhancement / derived project. The user
+executes manually, step by step; plan each layout with the user before writing; **never push** (the
+user pushes). See HANDOFF.md + the `project_readme_status` / `project_next_mission` memory.
 <!-- /checkpoint:pointer -->
